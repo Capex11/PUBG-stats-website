@@ -1,0 +1,639 @@
+{
+ "assetBase": "http://192.168.30.7:4000",
+ "teams": {
+  "721 ESPORTS": {
+   "slug": "721-esports",
+   "name": "721 ESPORTS",
+   "tag": "721",
+   "logo": "assets/img/teams/721-esports-logo.webp",
+   "flag": "assets/img/teams/721-esports-flag.webp",
+   "color": "#0f3ef9",
+   "tone": "mixed"
+  },
+  "7C ESPORTS": {
+   "slug": "7c-esports",
+   "name": "7C ESPORTS",
+   "tag": "7C",
+   "logo": "assets/img/teams/7c-esports-logo.webp",
+   "flag": "assets/img/teams/7c-esports-flag.webp",
+   "color": "#cc5424",
+   "tone": "mixed"
+  },
+  "ALULA Esports": {
+   "slug": "alula-esports",
+   "name": "ALULA Esports",
+   "tag": "Ula",
+   "logo": "assets/img/teams/alula-esports-logo.webp",
+   "flag": "assets/img/teams/alula-esports-flag.webp",
+   "color": "#1386d2",
+   "tone": "mixed"
+  },
+  "CB9 Esports": {
+   "slug": "cb9-esports",
+   "name": "CB9 Esports",
+   "tag": "CB9",
+   "logo": "assets/img/teams/cb9-esports-logo.webp",
+   "flag": "assets/img/teams/cb9-esports-flag.webp",
+   "color": "#e4243c",
+   "tone": "light"
+  },
+  "DAT ALREMAL": {
+   "slug": "dat-alremal",
+   "name": "DAT ALREMAL",
+   "tag": "DAT",
+   "logo": "assets/img/teams/dat-alremal-logo.webp",
+   "flag": "assets/img/teams/dat-alremal-flag.webp",
+   "color": "#8b93a7",
+   "tone": "light"
+  },
+  "ETSH ESPORTS": {
+   "slug": "etsh-esports",
+   "name": "ETSH ESPORTS",
+   "tag": "ETSH",
+   "logo": "assets/img/teams/etsh-esports-logo.webp",
+   "flag": "assets/img/teams/etsh-esports-flag.webp",
+   "color": "#8b93a7",
+   "tone": "light"
+  },
+  "FOUR WIZ": {
+   "slug": "four-wiz",
+   "name": "FOUR WIZ",
+   "tag": "4W",
+   "logo": "assets/img/teams/four-wiz-logo.webp",
+   "flag": "assets/img/teams/four-wiz-flag.webp",
+   "color": "#8b93a7",
+   "tone": "light"
+  },
+  "Geekay Esports": {
+   "slug": "geekay-esports",
+   "name": "Geekay Esports",
+   "tag": "GEEK",
+   "logo": "assets/img/teams/geekay-esports-logo.webp",
+   "flag": "assets/img/teams/geekay-esports-flag.webp",
+   "color": "#3960ac",
+   "tone": "mixed"
+  },
+  "KHK Esports": {
+   "slug": "khk-esports",
+   "name": "KHK Esports",
+   "tag": "KHK",
+   "logo": "assets/img/teams/khk-esports-logo.webp",
+   "flag": "assets/img/teams/khk-esports-flag.webp",
+   "color": "#bb4d4d",
+   "tone": "mixed"
+  },
+  "MASTER TEAM": {
+   "slug": "master-team",
+   "name": "MASTER TEAM",
+   "tag": "MSTR",
+   "logo": "assets/img/teams/master-team-logo.webp",
+   "flag": "assets/img/teams/master-team-flag.webp",
+   "color": "#d26013",
+   "tone": "mixed"
+  },
+  "Nigma Galaxy": {
+   "slug": "nigma-galaxy",
+   "name": "Nigma Galaxy",
+   "tag": "NGX",
+   "logo": "assets/img/teams/nigma-galaxy-logo.webp",
+   "flag": "assets/img/teams/nigma-galaxy-flag.webp",
+   "color": "#642bba",
+   "tone": "dark"
+  },
+  "R8 ESPORTS": {
+   "slug": "r8-esports",
+   "name": "R8 ESPORTS",
+   "tag": "R8",
+   "logo": "assets/img/teams/r8-esports-logo.webp",
+   "flag": "assets/img/teams/r8-esports-flag.webp",
+   "color": "#3eb4fa",
+   "tone": "light"
+  },
+  "RA'AD": {
+   "slug": "ra-ad",
+   "name": "RA'AD",
+   "tag": "RAAD",
+   "logo": "assets/img/teams/ra-ad-logo.webp",
+   "flag": "assets/img/teams/ra-ad-flag.webp",
+   "color": "#2626bf",
+   "tone": "mixed"
+  },
+  "THE HUNTERS": {
+   "slug": "the-hunters",
+   "name": "THE HUNTERS",
+   "tag": "HUNT",
+   "logo": "assets/img/teams/the-hunters-logo.webp",
+   "flag": "assets/img/teams/the-hunters-flag.webp",
+   "color": "#d21313",
+   "tone": "mixed"
+  },
+  "Team Vision": {
+   "slug": "team-vision",
+   "name": "Team Vision",
+   "tag": "VSN",
+   "logo": "assets/img/teams/team-vision-logo.webp",
+   "flag": "assets/img/teams/team-vision-flag.webp",
+   "color": "#f90f0f",
+   "tone": "dark"
+  },
+  "iKURD ESPORTS": {
+   "slug": "ikurd-esports",
+   "name": "iKURD ESPORTS",
+   "tag": "iKURD",
+   "logo": "assets/img/teams/ikurd-esports-logo.webp",
+   "flag": "assets/img/teams/ikurd-esports-flag.webp",
+   "color": "#840ff9",
+   "tone": "mixed"
+  }
+ },
+ "players": {
+  "4wClever": {
+   "slug": "4wclever",
+   "name": "4wClever",
+   "photo": "assets/img/players/4wclever-photo.webp",
+   "portrait": null
+  },
+  "4wM1D0": {
+   "slug": "4wm1d0",
+   "name": "4wM1D0",
+   "photo": "assets/img/players/4wm1d0-photo.webp",
+   "portrait": null
+  },
+  "4wM1RACLE": {
+   "slug": "4wm1racle",
+   "name": "4wM1RACLE",
+   "photo": "assets/img/players/4wm1racle-photo.webp",
+   "portrait": null
+  },
+  "4wSALAM96": {
+   "slug": "4wsalam96",
+   "name": "4wSALAM96",
+   "photo": "assets/img/players/4wsalam96-photo.webp",
+   "portrait": null
+  },
+  "4wTOMEū": {
+   "slug": "4wtomeu",
+   "name": "4wTOMEū",
+   "photo": "assets/img/players/4wtomeu-photo.webp",
+   "portrait": null
+  },
+  "721ALEKOOOOOOO": {
+   "slug": "721alekooooooo",
+   "name": "721ALEKOOOOOOO",
+   "photo": "assets/img/players/721alekooooooo-photo.webp",
+   "portrait": null
+  },
+  "721MALLLLLLLIK": {
+   "slug": "721malllllllik",
+   "name": "721MALLLLLLLIK",
+   "photo": "assets/img/players/721malllllllik-photo.webp",
+   "portrait": null
+  },
+  "721MASKOOOtxc": {
+   "slug": "721maskoootxc",
+   "name": "721MASKOOOtxc",
+   "photo": "assets/img/players/721maskoootxc-photo.webp",
+   "portrait": null
+  },
+  "721REHANNNNNNN": {
+   "slug": "721rehannnnnnn",
+   "name": "721REHANNNNNNN",
+   "photo": "assets/img/players/721rehannnnnnn-photo.webp",
+   "portrait": null
+  },
+  "7cAssaf": {
+   "slug": "7cassaf",
+   "name": "7cAssaf",
+   "photo": "assets/img/players/7cassaf-photo.webp",
+   "portrait": null
+  },
+  "7cEmmad": {
+   "slug": "7cemmad",
+   "name": "7cEmmad",
+   "photo": "assets/img/players/7cemmad-photo.webp",
+   "portrait": null
+  },
+  "7cLAITH": {
+   "slug": "7claith",
+   "name": "7cLAITH",
+   "photo": "assets/img/players/7claith-photo.webp",
+   "portrait": null
+  },
+  "7cPowerFul": {
+   "slug": "7cpowerful",
+   "name": "7cPowerFul",
+   "photo": "assets/img/players/7cpowerful-photo.webp",
+   "portrait": null
+  },
+  "CB9AMJED": {
+   "slug": "cb9amjed",
+   "name": "CB9AMJED",
+   "photo": "assets/img/players/cb9amjed-photo.webp",
+   "portrait": null
+  },
+  "CB9DEXTER": {
+   "slug": "cb9dexter",
+   "name": "CB9DEXTER",
+   "photo": "assets/img/players/cb9dexter-photo.webp",
+   "portrait": null
+  },
+  "CB9GHARYANi": {
+   "slug": "cb9gharyani",
+   "name": "CB9GHARYANi",
+   "photo": "assets/img/players/cb9gharyani-photo.webp",
+   "portrait": null
+  },
+  "CB9KILUAA": {
+   "slug": "cb9kiluaa",
+   "name": "CB9KILUAA",
+   "photo": "assets/img/players/cb9kiluaa-photo.webp",
+   "portrait": null
+  },
+  "CB9MOSTA": {
+   "slug": "cb9mosta",
+   "name": "CB9MOSTA",
+   "photo": "assets/img/players/cb9mosta-photo.webp",
+   "portrait": null
+  },
+  "DATŪANASS": {
+   "slug": "datuanass",
+   "name": "DATŪANASS",
+   "photo": "assets/img/players/datuanass-photo.webp",
+   "portrait": null
+  },
+  "DATŪCAREZMAA": {
+   "slug": "datucarezmaa",
+   "name": "DATŪCAREZMAA",
+   "photo": "assets/img/players/datucarezmaa-photo.webp",
+   "portrait": null
+  },
+  "DATŪKLUZZ": {
+   "slug": "datukluzz",
+   "name": "DATŪKLUZZ",
+   "photo": "assets/img/players/datukluzz-photo.webp",
+   "portrait": null
+  },
+  "DATŪLORD": {
+   "slug": "datulord",
+   "name": "DATŪLORD",
+   "photo": "assets/img/players/datulord-photo.webp",
+   "portrait": null
+  },
+  "DATŪMAFIA": {
+   "slug": "datumafia",
+   "name": "DATŪMAFIA",
+   "photo": "assets/img/players/datumafia-photo.webp",
+   "portrait": null
+  },
+  "DATŪROMAAA": {
+   "slug": "daturomaaa",
+   "name": "DATŪROMAAA",
+   "photo": "assets/img/players/daturomaaa-photo.webp",
+   "portrait": null
+  },
+  "ETSHīNASSER74": {
+   "slug": "etshinasser74",
+   "name": "ETSHīNASSER74",
+   "photo": "assets/img/players/etshinasser74-photo.webp",
+   "portrait": null
+  },
+  "ETSHŲAPKRINO": {
+   "slug": "etshuapkrino",
+   "name": "ETSHŲAPKRINO",
+   "photo": "assets/img/players/etshuapkrino-photo.webp",
+   "portrait": null
+  },
+  "ETSHŲFAHiTA": {
+   "slug": "etshufahita",
+   "name": "ETSHŲFAHiTA",
+   "photo": "assets/img/players/etshufahita-photo.webp",
+   "portrait": null
+  },
+  "ETSHŲSPEED32": {
+   "slug": "etshuspeed32",
+   "name": "ETSHŲSPEED32",
+   "photo": "assets/img/players/etshuspeed32-photo.webp",
+   "portrait": null
+  },
+  "ETSHŲX": {
+   "slug": "etshux",
+   "name": "ETSHŲX",
+   "photo": "assets/img/players/etshux-photo.webp",
+   "portrait": null
+  },
+  "GeekEZ4BADBOY": {
+   "slug": "geekez4badboy",
+   "name": "GeekEZ4BADBOY",
+   "photo": "assets/img/players/geekez4badboy-photo.webp",
+   "portrait": null
+  },
+  "GeekKEVIN88": {
+   "slug": "geekkevin88",
+   "name": "GeekKEVIN88",
+   "photo": "assets/img/players/geekkevin88-photo.webp",
+   "portrait": null
+  },
+  "GeekRAGNARoK26": {
+   "slug": "geekragnarok26",
+   "name": "GeekRAGNARoK26",
+   "photo": "assets/img/players/geekragnarok26-photo.webp",
+   "portrait": null
+  },
+  "GeekSAFG": {
+   "slug": "geeksafg",
+   "name": "GeekSAFG",
+   "photo": "assets/img/players/geeksafg-photo.webp",
+   "portrait": null
+  },
+  "KHKAMOOR": {
+   "slug": "khkamoor",
+   "name": "KHKAMOOR",
+   "photo": "assets/img/players/khkamoor-photo.webp",
+   "portrait": null
+  },
+  "KhkCASANOVA77K": {
+   "slug": "khkcasanova77k",
+   "name": "KhkCASANOVA77K",
+   "photo": "assets/img/players/khkcasanova77k-photo.webp",
+   "portrait": null
+  },
+  "R8AMOORI": {
+   "slug": "r8amoori",
+   "name": "R8AMOORI",
+   "photo": "assets/img/players/r8amoori-photo.webp",
+   "portrait": null
+  },
+  "R8B5ET": {
+   "slug": "r8b5et",
+   "name": "R8B5ET",
+   "photo": "assets/img/players/r8b5et-photo.webp",
+   "portrait": null
+  },
+  "R8Marth": {
+   "slug": "r8marth",
+   "name": "R8Marth",
+   "photo": "assets/img/players/r8marth-photo.webp",
+   "portrait": null
+  },
+  "R8PRESTLGE": {
+   "slug": "r8prestlge",
+   "name": "R8PRESTLGE",
+   "photo": "assets/img/players/r8prestlge-photo.webp",
+   "portrait": null
+  },
+  "R8SKTON": {
+   "slug": "r8skton",
+   "name": "R8SKTON",
+   "photo": "assets/img/players/r8skton-photo.webp",
+   "portrait": null
+  },
+  "RAADFEVOO": {
+   "slug": "raadfevoo",
+   "name": "RAADFEVOO",
+   "photo": "assets/img/players/raadfevoo-photo.webp",
+   "portrait": null
+  },
+  "RAADNOSSA99": {
+   "slug": "raadnossa99",
+   "name": "RAADNOSSA99",
+   "photo": "assets/img/players/raadnossa99-photo.webp",
+   "portrait": null
+  },
+  "RAADRINOOOO": {
+   "slug": "raadrinoooo",
+   "name": "RAADRINOOOO",
+   "photo": "assets/img/players/raadrinoooo-photo.webp",
+   "portrait": null
+  },
+  "RAADZUXXY隋": {
+   "slug": "raadzuxxy",
+   "name": "RAADZUXXY隋",
+   "photo": "assets/img/players/raadzuxxy-photo.webp",
+   "portrait": null
+  },
+  "RAADōLabubu": {
+   "slug": "raadolabubu",
+   "name": "RAADōLabubu",
+   "photo": null,
+   "portrait": null
+  },
+  "UlaKhatab": {
+   "slug": "ulakhatab",
+   "name": "UlaKhatab",
+   "photo": "assets/img/players/ulakhatab-photo.webp",
+   "portrait": null
+  },
+  "UlaKŁAWS": {
+   "slug": "ulak-aws",
+   "name": "UlaKŁAWS",
+   "photo": "assets/img/players/ulak-aws-photo.webp",
+   "portrait": null
+  },
+  "UlaQuick": {
+   "slug": "ulaquick",
+   "name": "UlaQuick",
+   "photo": "assets/img/players/ulaquick-photo.webp",
+   "portrait": null
+  },
+  "UlaR3B": {
+   "slug": "ular3b",
+   "name": "UlaR3B",
+   "photo": "assets/img/players/ular3b-photo.webp",
+   "portrait": null
+  },
+  "UlaY4SR": {
+   "slug": "ulay4sr",
+   "name": "UlaY4SR",
+   "photo": "assets/img/players/ulay4sr-photo.webp",
+   "portrait": null
+  },
+  "VSNxAGA1NN": {
+   "slug": "vsnxaga1nn",
+   "name": "VSNxAGA1NN",
+   "photo": "assets/img/players/vsnxaga1nn-photo.webp",
+   "portrait": null
+  },
+  "VSNxENJOY": {
+   "slug": "vsnxenjoy",
+   "name": "VSNxENJOY",
+   "photo": "assets/img/players/vsnxenjoy-photo.webp",
+   "portrait": null
+  },
+  "VSNxMarcelo511": {
+   "slug": "vsnxmarcelo511",
+   "name": "VSNxMarcelo511",
+   "photo": "assets/img/players/vsnxmarcelo511-photo.webp",
+   "portrait": null
+  },
+  "VSNxNawaF": {
+   "slug": "vsnxnawaf",
+   "name": "VSNxNawaF",
+   "photo": "assets/img/players/vsnxnawaf-photo.webp",
+   "portrait": null
+  },
+  "VSNxNvrAlone": {
+   "slug": "vsnxnvralone",
+   "name": "VSNxNvrAlone",
+   "photo": "assets/img/players/vsnxnvralone-photo.webp",
+   "portrait": null
+  },
+  "huntATAL": {
+   "slug": "huntatal",
+   "name": "huntATAL",
+   "photo": "assets/img/players/huntatal-photo.webp",
+   "portrait": null
+  },
+  "huntBROLY444": {
+   "slug": "huntbroly444",
+   "name": "huntBROLY444",
+   "photo": "assets/img/players/huntbroly444-photo.webp",
+   "portrait": null
+  },
+  "huntCAZORLAA": {
+   "slug": "huntcazorlaa",
+   "name": "huntCAZORLAA",
+   "photo": "assets/img/players/huntcazorlaa-photo.webp",
+   "portrait": null
+  },
+  "huntROZESS": {
+   "slug": "huntrozess",
+   "name": "huntROZESS",
+   "photo": "assets/img/players/huntrozess-photo.webp",
+   "portrait": null
+  },
+  "huntSOSAVn1": {
+   "slug": "huntsosavn1",
+   "name": "huntSOSAVn1",
+   "photo": "assets/img/players/huntsosavn1-photo.webp",
+   "portrait": null
+  },
+  "iKURDxASADD": {
+   "slug": "ikurdxasadd",
+   "name": "iKURDxASADD",
+   "photo": "assets/img/players/ikurdxasadd-photo.webp",
+   "portrait": null
+  },
+  "iKURDxGØRAN": {
+   "slug": "ikurdxg-ran",
+   "name": "iKURDxGØRAN",
+   "photo": "assets/img/players/ikurdxg-ran-photo.webp",
+   "portrait": null
+  },
+  "iKURDxHIWAklar": {
+   "slug": "ikurdxhiwaklar",
+   "name": "iKURDxHIWAklar",
+   "photo": "assets/img/players/ikurdxhiwaklar-photo.webp",
+   "portrait": null
+  },
+  "iKURDxMAN98": {
+   "slug": "ikurdxman98",
+   "name": "iKURDxMAN98",
+   "photo": "assets/img/players/ikurdxman98-photo.webp",
+   "portrait": null
+  },
+  "iKURDxNARUTOo": {
+   "slug": "ikurdxnarutoo",
+   "name": "iKURDxNARUTOo",
+   "photo": "assets/img/players/ikurdxnarutoo-photo.webp",
+   "portrait": null
+  },
+  "khk1RFAN": {
+   "slug": "khk1rfan",
+   "name": "khk1RFAN",
+   "photo": "assets/img/players/khk1rfan-photo.webp",
+   "portrait": null
+  },
+  "khkNW٭": {
+   "slug": "khknw",
+   "name": "khkNW٭",
+   "photo": "assets/img/players/khknw-photo.webp",
+   "portrait": null
+  },
+  "khkWALOODī": {
+   "slug": "khkwaloodi",
+   "name": "khkWALOODī",
+   "photo": "assets/img/players/khkwaloodi-photo.webp",
+   "portrait": null
+  },
+  "mstrBOSSē": {
+   "slug": "mstrbosse",
+   "name": "mstrBOSSē",
+   "photo": "assets/img/players/mstrbosse-photo.webp",
+   "portrait": null
+  },
+  "mstrEYAD": {
+   "slug": "mstreyad",
+   "name": "mstrEYAD",
+   "photo": "assets/img/players/mstreyad-photo.webp",
+   "portrait": null
+  },
+  "mstrKARA": {
+   "slug": "mstrkara",
+   "name": "mstrKARA",
+   "photo": "assets/img/players/mstrkara-photo.webp",
+   "portrait": null
+  },
+  "mstrMORSHē": {
+   "slug": "mstrmorshe",
+   "name": "mstrMORSHē",
+   "photo": null,
+   "portrait": null
+  },
+  "mstrSAROUT": {
+   "slug": "mstrsarout",
+   "name": "mstrSAROUT",
+   "photo": "assets/img/players/mstrsarout-photo.webp",
+   "portrait": null
+  },
+  "mstrSONIC¹iQ": {
+   "slug": "mstrsonic1iq",
+   "name": "mstrSONIC¹iQ",
+   "photo": "assets/img/players/mstrsonic1iq-photo.webp",
+   "portrait": null
+  },
+  "ngx4YDO": {
+   "slug": "ngx4ydo",
+   "name": "ngx4YDO",
+   "photo": "assets/img/players/ngx4ydo-photo.webp",
+   "portrait": null
+  },
+  "ngxKOOPS02": {
+   "slug": "ngxkoops02",
+   "name": "ngxKOOPS02",
+   "photo": "assets/img/players/ngxkoops02-photo.webp",
+   "portrait": null
+  },
+  "ngxLORDū": {
+   "slug": "ngxlordu",
+   "name": "ngxLORDū",
+   "photo": "assets/img/players/ngxlordu-photo.webp",
+   "portrait": null
+  },
+  "ngxRAOUF": {
+   "slug": "ngxraouf",
+   "name": "ngxRAOUF",
+   "photo": "assets/img/players/ngxraouf-photo.webp",
+   "portrait": null
+  },
+  "ngxSaTaN33ň": {
+   "slug": "ngxsatan33n",
+   "name": "ngxSaTaN33ň",
+   "photo": "assets/img/players/ngxsatan33n-photo.webp",
+   "portrait": null
+  }
+ },
+ "missing": [
+  {
+   "type": "player-photo",
+   "player": "RAADōLabubu",
+   "team": "RA'AD",
+   "tried": "PMGC 2026/PMGO/player kill/RA'AD/RAADōLabubu.png"
+  },
+  {
+   "type": "player-photo",
+   "player": "mstrMORSHē",
+   "team": "MASTER TEAM",
+   "tried": "PMGC 2026/PMGO/player kill/MASTER TEAM/mstrMORSHē.png"
+  }
+ ]
+}

@@ -1,0 +1,75 @@
+/* Full standings for the active scope, plus the per-match placement grid that
+   shows how each team actually got there. */
+
+import { store } from '../store.js';
+import { esc, num, panel, rgba, crest, dataTable } from '../ui.js';
+import { lineChart, heatmap, ramp } from '../charts.js';
+import { pageHead, standingsTable, scopeName } from './common.js';
+
+export async function render({ scope }) {
+  const rows = store.standingsIn(scope);
+  const matches = store.matchesIn(scope);
+  const meta = store.meta;
+  const placement = Object.entries(meta.scoring.placement)
+    .map(([k, v]) => `#${k} → ${v}`).join(' · ');
+
+  const matchTeams = await fetch('data/matchteams.json').then(r => r.json());
+
+  const grid = placementGrid(rows, matches, matchTeams);
+  const race = lineChart({
+    series: rows.slice(0, 16).map(r => ({
+      name: r.name, color: r.color, values: r.cumulativePoints,
+      width: r.rank <= 3 ? 2.6 : 1.4,
+    })),
+    labels: matches.map(m => m.short),
+    height: 340,
+  });
+
+  return {
+    html: `${pageHead({
+      crumb: `${esc(meta.tournament.label)} · ${esc(scopeName(scope))}`,
+      title: 'Standings',
+      sub: `${rows.length} teams over ${matches.length} matches. Placement points: ${placement}; ${meta.scoring.perKill} point per kill.`,
+    })}
+    ${panel('', standingsTable(scope))}
+    ${panel('Points race', race + legend(rows), {
+      note: 'Cumulative points after every match in this stage.',
+    })}
+    ${panel('Placement grid', grid, {
+      note: 'Every team’s finish in every match — colour is the placement points earned. Hover a cell for detail.',
+    })}`,
+  };
+}
+
+function legend(rows) {
+  return `<div class="legend" style="margin-top:10px">${rows.map(r =>
+    `<span><span class="sw" style="background:${r.color}"></span>${esc(r.tag)}</span>`).join('')}</div>`;
+}
+
+function placementGrid(rows, matches, matchTeams) {
+  const cols = matches.map(m => m.short);
+  const values = rows.map(r => matches.map(m => {
+    const rec = (matchTeams[m.key] || []).find(t => t.id === r.id);
+    return rec ? rec.rank : null;
+  }));
+  const points = rows.map(r => matches.map(m => {
+    const rec = (matchTeams[m.key] || []).find(t => t.id === r.id);
+    return rec ? rec.points : 0;
+  }));
+  const maxPoints = Math.max(1, ...points.flat());
+
+  return heatmap({
+    rows,
+    cols,
+    values,
+    rowLabel: r => `<a class="ident" href="#/teams/${r.id}" style="gap:6px">
+      ${crest(store.team(r.id), 'sm')}<span class="name" style="font-size:12px">${esc(r.tag)}</span></a>`,
+    colorFor: (v, ri, ci) => v === null ? 'var(--panel-2)' : ramp(points[ri][ci] / maxPoints, rows[ri].color),
+    cellTip: (r, c, v, ri, ci) => {
+      const m = matches[ci];
+      const rec = (matchTeams[m.key] || []).find(t => t.id === r.id);
+      if (!rec) return `${r.name}: did not play`;
+      return `<b>${esc(r.name)}</b><br>${esc(m.displayTitle)}<br>#${rec.rank} · ${rec.kills} kills · ${rec.points} pts`;
+    },
+  });
+}

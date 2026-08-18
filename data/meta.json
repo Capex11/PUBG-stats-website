@@ -1,0 +1,86 @@
+{
+ "generatedAt":"2026-08-18T19:44:45Z",
+ "sourceFetchedAt":"2026-08-18T18:08:50Z",
+ "tournament":{
+  "id":"69fc1373a966509c1353e8bf",
+  "title":"PMGO",
+  "label":"PMGO 2026",
+  "notes":"2 Stages with modifier."
+ },
+ "stages":[
+  {
+   "key":"groups",
+   "title":"Groups",
+   "label":"League",
+   "number":1,
+   "matches":18,
+   "teams":16,
+   "modifiers":{}
+  },
+  {
+   "key":"finals",
+   "title":"Finals",
+   "label":"Finals",
+   "number":2,
+   "matches":18,
+   "teams":16,
+   "modifiers":{
+    "THE HUNTERS":1,
+    "RA'AD":2,
+    "MASTER TEAM":4,
+    "ETSH ESPORTS":7,
+    "ALULA Esports":3,
+    "7C ESPORTS":5,
+    "721 ESPORTS":15,
+    "DAT ALREMAL":1,
+    "FOUR WIZ":5,
+    "CB9 Esports":4,
+    "Geekay Esports":6,
+    "iKURD ESPORTS":12,
+    "KHK Esports":2,
+    "Nigma Galaxy":8,
+    "R8 ESPORTS":3,
+    "Team Vision":9
+   }
+  }
+ ],
+ "scoring":{
+  "placement":{
+   "1":10,
+   "2":6,
+   "3":5,
+   "4":4,
+   "5":3,
+   "6":2,
+   "7":1,
+   "8":1
+  },
+  "perKill":1
+ },
+ "counts":{
+  "matches":36,
+  "teams":16,
+  "players":79,
+  "killEvents":5031
+ },
+ "dataQuality":{
+  "killLogCoverage":1.0,
+  "killLogNote":"Kill-log analytics (weapons, distances, timing, head to head) come from the in-game kill feed, which is captured live and is incomplete for some matches. Player and team stat lines come from the end-of-match payload and are complete.",
+  "matchesWithoutKillLog":[
+   "groups-d1-g4"
+  ],
+  "playerPhotos":77,
+  "teamLogos":16
+ },
+ "ratingWeights":{
+  "killsPerMatch":0.28,
+  "damagePerMatch":0.24,
+  "kpRate":0.12,
+  "avgSurvival":0.12,
+  "assistsPerMatch":0.1,
+  "knockoutsPerMatch":0.08,
+  "rescuesPerMatch":0.06
+ },
+ "weapons":{},
+ "assetsMissing":2
+}

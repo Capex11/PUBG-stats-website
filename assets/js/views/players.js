@@ -1,0 +1,73 @@
+/* Player index: filter by team, minimum matches and free text, then sort on any
+   column. The table is rebuilt client-side so filtering stays instant. */
+
+import { store } from '../store.js';
+import { el, els, esc, num, panel, crest, bindTables, bindTooltips } from '../ui.js';
+import { icon } from '../icons.js';
+import { pageHead, playersTable, scopeName } from './common.js';
+
+export async function render({ scope }) {
+  const teams = store.teamsIn(scope).sort((a, b) => a.s.rank - b.s.rank);
+  const all = store.playersIn(scope);
+
+  const controls = `<div class="panel-head" style="margin-bottom:12px">
+    <div class="search-box" style="min-width:200px">
+      <span class="icon" aria-hidden="true">${icon('search', { size: 15 })}</span>
+      <input id="pf-text" type="search" placeholder="Filter players…" style="width:100%"
+        aria-label="Filter players by name or team">
+    </div>
+    <label class="small muted">Min matches
+      <input id="pf-min" type="number" min="0" max="36" value="0"
+        style="width:64px;background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:6px 8px;margin-left:6px">
+    </label>
+    <span class="small dim" id="pf-count"></span>
+  </div>
+  <div class="chips" id="pf-teams" role="group" aria-label="Filter by team" style="margin-bottom:14px">
+    <button type="button" class="chip" aria-pressed="true" data-team="">All teams</button>
+    ${teams.map(t => `<button type="button" class="chip" aria-pressed="false"
+      data-team="${t.id}">${crest(t, 'sm')} ${esc(t.tag)}</button>`).join('')}
+  </div>`;
+
+  return {
+    html: `${pageHead({
+      crumb: `${esc(store.meta.tournament.label)} · ${esc(scopeName(scope))}`,
+      title: 'Players',
+      sub: `${all.length} players. Rating is a weighted z-score of per-match production — 50 is the field average, ±15 is one standard deviation.`,
+      aside: `<a class="chip" href="#/compare">Compare players →</a>`,
+    })}
+    <section class="panel">
+      ${controls}
+      <div id="pf-table">${playersTable(scope, all)}</div>
+    </section>`,
+    mount(root) {
+      const state = { text: '', team: '', min: 0 };
+      const draw = () => {
+        const rows = all.filter(p =>
+          (!state.team || p.teamId === state.team)
+          && p.s.matches >= state.min
+          && (!state.text
+            || p.name.toLowerCase().includes(state.text)
+            || (p.teamName || '').toLowerCase().includes(state.text)));
+        const box = el('#pf-table', root);
+        box.innerHTML = playersTable(scope, rows);
+        bindTables(box);
+        bindTooltips(box);
+        el('#pf-count', root).textContent = `${rows.length} of ${all.length} players`;
+      };
+      el('#pf-text', root).addEventListener('input', ev => {
+        state.text = ev.target.value.trim().toLowerCase();
+        draw();
+      });
+      el('#pf-min', root).addEventListener('input', ev => {
+        state.min = Number(ev.target.value) || 0;
+        draw();
+      });
+      els('#pf-teams .chip', root).forEach(chip => chip.addEventListener('click', () => {
+        els('#pf-teams .chip', root).forEach(c => c.setAttribute('aria-pressed', String(c === chip)));
+        state.team = chip.dataset.team;
+        draw();
+      }));
+      el('#pf-count', root).textContent = `${all.length} of ${all.length} players`;
+    },
+  };
+}

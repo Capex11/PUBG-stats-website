@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PMGO Analytics — PUBG Mobile esports stats</title>
+<meta name="description" content="Match results, team and player statistics, and analytics for the PMGO PUBG Mobile competition.">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0b0e14" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f6fb" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="PMGO Analytics">
+<meta property="og:description" content="PUBG Mobile esports analytics: standings, team and player stats, match breakdowns and comparisons.">
+<meta property="og:type" content="website">
+<script>
+  /* Apply the stored theme before first paint so there is no flash. */
+  (function () {
+    try {
+      var t = localStorage.getItem('pmgo.theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) { /* private mode: fall back to the OS preference */ }
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/app.css?v=2">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0e14'/%3E%3Crect x='7' y='16' width='4' height='9' rx='1.5' fill='%23ffb02e'/%3E%3Crect x='14' y='11' width='4' height='14' rx='1.5' fill='%2335d0ba'/%3E%3Crect x='21' y='6' width='4' height='19' rx='1.5' fill='%236f8cff'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="#/" aria-label="PMGO Analytics — home">
+      <span class="dot" aria-hidden="true"></span>
+      <span>PMGO<small>Esports Analytics</small></span>
+    </a>
+    <nav class="main" id="nav" aria-label="Main"></nav>
+    <div class="scope-picker" id="scope" role="group" aria-label="Tournament stage"></div>
+    <div class="search-box">
+      <span class="icon" aria-hidden="true"></span>
+      <input id="search" type="search" placeholder="Search teams, players…" autocomplete="off"
+        role="combobox" aria-expanded="false" aria-controls="search-results"
+        aria-label="Search teams, players and games">
+      <div class="search-results hidden" id="search-results" role="listbox" aria-label="Search results"></div>
+    </div>
+    <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch theme"></button>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap" id="view" aria-live="polite" aria-busy="true"></div>
+</main>
+
+<div class="tooltip" id="tooltip" role="status" aria-live="polite"></div>
+
+<script type="module" src="assets/js/main.js?v=2"></script>
+</body>
+</html>

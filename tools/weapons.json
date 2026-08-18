@@ -1,0 +1,522 @@
+{
+ "note": "ItemID -> weapon mapping for the in-game kill feed. Fill in name/class to have the site show weapon names instead of raw item IDs; anything left blank renders as the item ID. 'events' and 'medianDistance' are observed in the current data and are there only to help identify each item - they are ignored by the build.",
+ "classes": [
+  "AR",
+  "DMR",
+  "SR",
+  "SMG",
+  "LMG",
+  "Shotgun",
+  "Pistol",
+  "Throwable",
+  "Vehicle",
+  "Melee",
+  "Other"
+ ],
+ "items": {
+  "101006": {
+   "name": "",
+   "class": "",
+   "events": 1151,
+   "medianDistance": 159
+  },
+  "101004": {
+   "name": "",
+   "class": "",
+   "events": 1064,
+   "medianDistance": 170
+  },
+  "104003": {
+   "name": "",
+   "class": "",
+   "events": 535,
+   "medianDistance": 44
+  },
+  "602004": {
+   "name": "",
+   "class": "",
+   "events": 399,
+   "medianDistance": 61
+  },
+  "101003": {
+   "name": "",
+   "class": "",
+   "events": 222,
+   "medianDistance": 188
+  },
+  "102002": {
+   "name": "",
+   "class": "",
+   "events": 177,
+   "medianDistance": 44
+  },
+  "104004": {
+   "name": "",
+   "class": "",
+   "events": 135,
+   "medianDistance": 67
+  },
+  "101001": {
+   "name": "",
+   "class": "",
+   "events": 87,
+   "medianDistance": 48
+  },
+  "102008": {
+   "name": "",
+   "class": "",
+   "events": 50,
+   "medianDistance": 49
+  },
+  "101101": {
+   "name": "",
+   "class": "",
+   "events": 35,
+   "medianDistance": 159
+  },
+  "602003": {
+   "name": "",
+   "class": "",
+   "events": 31,
+   "medianDistance": 43
+  },
+  "101007": {
+   "name": "",
+   "class": "",
+   "events": 30,
+   "medianDistance": 200
+  },
+  "103006": {
+   "name": "",
+   "class": "",
+   "events": 24,
+   "medianDistance": 167
+  },
+  "102005": {
+   "name": "",
+   "class": "",
+   "events": 23,
+   "medianDistance": 56
+  },
+  "104002": {
+   "name": "",
+   "class": "",
+   "events": 23,
+   "medianDistance": 26
+  },
+  "101012": {
+   "name": "",
+   "class": "",
+   "events": 17,
+   "medianDistance": 73
+  },
+  "105002": {
+   "name": "",
+   "class": "",
+   "events": 15,
+   "medianDistance": 182
+  },
+  "102001": {
+   "name": "",
+   "class": "",
+   "events": 14,
+   "medianDistance": 345
+  },
+  "102004": {
+   "name": "",
+   "class": "",
+   "events": 13,
+   "medianDistance": 18
+  },
+  "105010": {
+   "name": "",
+   "class": "",
+   "events": 11,
+   "medianDistance": 59
+  },
+  "102105": {
+   "name": "",
+   "class": "",
+   "events": 10,
+   "medianDistance": 66
+  },
+  "101005": {
+   "name": "",
+   "class": "",
+   "events": 10,
+   "medianDistance": 42
+  },
+  "105001": {
+   "name": "",
+   "class": "",
+   "events": 9,
+   "medianDistance": 80
+  },
+  "108005": {
+   "name": "",
+   "class": "",
+   "events": 8,
+   "medianDistance": 43
+  },
+  "101002": {
+   "name": "",
+   "class": "",
+   "events": 7,
+   "medianDistance": 238
+  },
+  "101008": {
+   "name": "",
+   "class": "",
+   "events": 6,
+   "medianDistance": 67
+  },
+  "101102": {
+   "name": "",
+   "class": "",
+   "events": 4,
+   "medianDistance": 154
+  },
+  "102007": {
+   "name": "",
+   "class": "",
+   "events": 3,
+   "medianDistance": 98
+  },
+  "103007": {
+   "name": "",
+   "class": "",
+   "events": 3,
+   "medianDistance": 133
+  },
+  "1907060": {
+   "name": "",
+   "class": "",
+   "events": 3,
+   "medianDistance": 84
+  },
+  "102003": {
+   "name": "",
+   "class": "",
+   "events": 3,
+   "medianDistance": 20
+  },
+  "1907059": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 123
+  },
+  "1961036": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 300
+  },
+  "101100": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 196
+  },
+  "1907028": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 270
+  },
+  "103009": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 113
+  },
+  "1907012": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 249
+  },
+  "103103": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 253
+  },
+  "1961020": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 498
+  },
+  "103008": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 133
+  },
+  "106001": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 94
+  },
+  "104001": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 344
+  },
+  "1988003": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 210
+  },
+  "103004": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 31
+  },
+  "103003": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 210
+  },
+  "1907043": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 33
+  },
+  "1907062": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 69
+  },
+  "1915008": {
+   "name": "",
+   "class": "",
+   "events": 2,
+   "medianDistance": 250
+  },
+  "1903019": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 313
+  },
+  "103001": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 138
+  },
+  "1907052": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 51
+  },
+  "1907069": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 691
+  },
+  "1915003": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 202
+  },
+  "1988002": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 60
+  },
+  "1961049": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 110
+  },
+  "1961145": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 326
+  },
+  "1907046": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 137
+  },
+  "1907021": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 235
+  },
+  "1907048": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 427
+  },
+  "103102": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 202
+  },
+  "19116001": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 126
+  },
+  "1961054": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 509
+  },
+  "1907030": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 51
+  },
+  "1908106": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": null
+  },
+  "1961047": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 46
+  },
+  "1961025": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 85
+  },
+  "106008": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 66
+  },
+  "106002": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 164
+  },
+  "1915009": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 75
+  },
+  "1907066": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 196
+  },
+  "1907004": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 67
+  },
+  "1903090": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 79
+  },
+  "1961014": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 88
+  },
+  "1961050": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 146
+  },
+  "1903072": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 53
+  },
+  "103012": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 221
+  },
+  "1908015": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 255
+  },
+  "1961052": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 151
+  },
+  "1903040": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 371
+  },
+  "1961066": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 216
+  },
+  "103010": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 32
+  },
+  "1961061": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 54
+  },
+  "1961060": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 515
+  },
+  "1961001": {
+   "name": "",
+   "class": "",
+   "events": 1,
+   "medianDistance": 280
+  }
+ }
+}

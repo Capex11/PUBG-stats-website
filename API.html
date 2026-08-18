@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Esport-AHW — API Reference</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1c1e; --muted: #5c636a; --line: #e3e6e8;
+    --card: #f7f8f9; --accent: #1e6feb;
+    --get: #1a7f4b; --post: #b26a00; --put: #6a4fbd; --del: #c0392b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181a; --fg: #e6e8ea; --muted: #9aa3ab; --line: #2c3034;
+      --card: #1e2124; --accent: #6aa3ff;
+      --get: #4cc38a; --post: #e0a458; --put: #a68ff0; --del: #f0736a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 2rem 1.25rem 4rem; background: var(--bg); color: var(--fg);
+         font: 15px/1.55 -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+  h1 { font-size: 1.7rem; margin: 0 0 .25rem; }
+  h2 { font-size: 1.1rem; margin: 2.2rem 0 .4rem; padding-top: .6rem; border-top: 1px solid var(--line); }
+  h2 .mount { font: 13px/1 ui-monospace, "Cascadia Code", Consolas, monospace; color: var(--accent); margin-left: .5rem; }
+  p.sub { color: var(--muted); margin: .2rem 0 1rem; }
+  p.gdesc { color: var(--muted); margin: .2rem 0 .6rem; font-size: .9rem; }
+  code, .path { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: .86em; }
+  .meta { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .9rem 1.1rem; margin-bottom: 1.2rem; }
+  .meta dl { display: grid; grid-template-columns: max-content 1fr; gap: .35rem 1rem; margin: 0; }
+  .meta dt { color: var(--muted); }
+  .meta dd { margin: 0; }
+  .note { border-left: 3px solid var(--accent); background: var(--card); padding: .7rem 1rem; margin: 1rem 0; border-radius: 0 6px 6px 0; }
+  .note.warn { border-left-color: var(--del); }
+  table { width: 100%; border-collapse: collapse; margin-bottom: .5rem; }
+  th, td { text-align: left; padding: .45rem .55rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: .74rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 600; }
+  td.m { width: 4.5rem; font-weight: 700; font-size: .78rem; font-family: ui-monospace, Consolas, monospace; }
+  td.p { width: 32%; }
+  td.a { width: 4.5rem; font-size: .78rem; }
+  .GET { color: var(--get); } .POST { color: var(--post); }
+  .PUT { color: var(--put); } .DELETE { color: var(--del); }
+  .key { color: var(--del); font-weight: 600; }
+  .open { color: var(--muted); }
+  .tools { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
+  input[type=search] { flex: 1 1 240px; padding: .5rem .7rem; border: 1px solid var(--line);
+                       border-radius: 6px; background: var(--bg); color: var(--fg); font-size: .9rem; }
+  button { padding: .5rem .9rem; border: 1px solid var(--line); border-radius: 6px;
+           background: var(--card); color: var(--fg); font-size: .9rem; cursor: pointer; }
+  .count { color: var(--muted); font-size: .85rem; }
+  .hidden { display: none; }
+  ul.ev { columns: 3; column-gap: 1.4rem; padding-left: 1.1rem; margin: .4rem 0; }
+  ul.ev li { break-inside: avoid; font-family: ui-monospace, Consolas, monospace; font-size: .82rem; }
+  footer { margin-top: 3rem; color: var(--muted); font-size: .82rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+  @media print {
+    body { padding: 0; font-size: 10.5px; color: #000; background: #fff; }
+    .tools, .noprint { display: none !important; }
+    h2 { break-after: avoid; }
+    tr { break-inside: avoid; }
+    a { color: #000; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Esport-AHW — API Reference</h1>
+<p class="sub">PUBG &amp; HOK broadcast backend · REST + Socket.IO · generated from <code>server/src/routes</code></p>
+
+<div class="meta">
+  <dl>
+    <dt>REST base</dt><dd><code>http://&lt;host&gt;:3000</code> — <code>PORT</code>, default 3000</dd>
+    <dt>Socket.IO</dt><dd><code>http://&lt;host&gt;:6060</code> — <code>SOCKET_PORT</code>, default 6060</dd>
+    <dt>Assets</dt><dd><code>STREAM_ASSET_BASE_URL</code> — serves <code>server/public/</code> statically</dd>
+    <dt>Auth header</dt><dd><code>x-api-key: &lt;API_KEY&gt;</code></dd>
+    <dt>Content type</dt><dd><code>application/json</code> (body limit 50 MB) — except <code>/upload-image</code> (multipart)</dd>
+    <dt>Health</dt><dd><code>GET /health</code> → <code>{ status: "ok", timestamp }</code></dd>
+  </dl>
+</div>
+
+<div class="note">
+  <strong>Auth rule — writes only.</strong> <code>GET</code> and <code>HEAD</code> are <em>always</em> open, on every route.
+  <code>POST</code>/<code>PUT</code>/<code>DELETE</code> under <code>/api</code> and <code>/upload-image</code> require the
+  <code>x-api-key</code> header; without it the server replies <code>401 {"error":"Unauthorized"}</code>.
+  Two write endpoints are deliberately exempt for machine ingest (curl/Postman/game dump):
+  <code>POST /api/stats/dump</code> and <code>POST /api/stats/dump-post-game</code>.
+  Overlay/stream routes carry no key at all — OBS browser sources cannot send headers.
+</div>
+
+<div class="tools noprint">
+  <input type="search" id="q" placeholder="Filter endpoints — path, method, field name…" autocomplete="off">
+  <button onclick="window.print()">Print / Save as PDF</button>
+  <span class="count" id="count"></span>
+</div>
+
+<div id="groups"></div>
+
+<h2>Socket.IO events <span class="mount">emitted by server → overlays</span></h2>
+<p class="gdesc">Overlay clients connect to the Socket.IO port and listen. Server-emitted event names:</p>
+<ul class="ev">
+  <li>game-state</li><li>team-info</li><li>players-stats-updated</li>
+  <li>first-blood</li><li>grenade-killed</li><li>vehicle-killed</li>
+  <li>hide-teams-table</li><li>show-teams-table</li><li>hide-top-four</li><li>show-top-four</li>
+  <li>end-live</li><li>force-stop-overlays</li><li>team-dead-test</li>
+  <li>overlay:theme:update</li><li>overlay:visibility:update</li>
+  <li>hud:test:outside-zone</li><li>preview:freeze</li>
+  <li>solo-player-info</li><li>hide-solo-table</li><li>show-solo-table</li>
+  <li>hide-solo-top-four</li><li>show-solo-top-four</li><li>end-solo-live</li>
+  <li>hok-ban-data</li><li>hok-drakes-data</li><li>hok-players-data</li>
+  <li>hok-players-testing-data</li><li>reset-pick-data</li><li>reset-live-data</li>
+  <li>hok-post-game-players-table</li><li>hok-post-game-players-info</li><li>hok-post-game-game-timeline</li>
+</ul>
+
+<footer>
+  Source of truth: <code>server/src/routes/index.ts</code> (mounts) and <code>server/src/index.ts</code> (app wiring).
+  Not mounted, therefore not reachable: <code>routes/weeks.ts</code> and <code>routes/live3.ts</code>.
+</footer>
+
+</div>
+
+<script>
+// Data mirrors server/src/routes. Row = [method, path, params/body, note]
+const GROUPS = [
+  { name: "Stream / overlay feeds", mount: "root — no key", desc: "Read-only JSON for OBS browser sources and the Cavalry injector. Image paths are rewritten onto STREAM_ASSET_BASE_URL. Every response carries imageBaseUrl, host, serverIp.", rows: [
+    ["GET", "/health", "—", "Liveness probe."],
+    ["GET", "/firstBlood", "—", "Current first-blood payload."],
+    ["GET", "/generalInfo", "—", "Live stream data snapshot."],
+    ["GET", "/teamWon", "—", "Winning-team stats. null until stats dumped."],
+    ["GET", "/playersStats", "—", "Post-game player stats with resolved image URLs."],
+    ["GET", "/tournament/mvp", "—", "Tournament MVP payload."],
+    ["GET", "/tournament/players-to-watch", "—", "Players-to-watch payload."],
+    ["GET", "/tournament/tourMvp", "—", "Tournament MVP overlay payload."],
+  ]},
+
+  { name: "Image upload", mount: "/upload-image", desc: "Multipart upload. Saves to server/public/<folder>/<uuid>.<ext>, served statically right away.", rows: [
+    ["POST", "/upload-image", "query: folder (default \"uploads\") · form-data: image (file)", "→ { imageId: \"<uuid>.<ext>\" }"],
+  ]},
+
+  { name: "Teams", mount: "/api/teams", desc: "", rows: [
+    ["GET", "/api/teams", "—", "List all teams."],
+    ["POST", "/api/teams", "body: team document", "Create team."],
+    ["PUT", "/api/teams/:id", "body: partial team document", "Update team."],
+    ["DELETE", "/api/teams/:id", "—", "Delete team."],
+  ]},
+
+  { name: "Tournaments", mount: "/api/tournaments", desc: "", rows: [
+    ["GET", "/api/tournaments", "—", "List tournaments."],
+    ["GET", "/api/tournaments/:id", "—", "Single tournament."],
+    ["POST", "/api/tournaments", "body: tournament document", "Create."],
+    ["PUT", "/api/tournaments/:id", "body: partial document", "Update."],
+    ["DELETE", "/api/tournaments/:id", "—", "Delete."],
+    ["GET", "/api/tournaments/:id/stages", "—", "Stages of this tournament."],
+    ["GET", "/api/tournaments/:id/teams", "—", "Populated team docs."],
+    ["POST", "/api/tournaments/:id/teams", "body: { teamIds: string[] }", "Bulk-attach teams."],
+    ["DELETE", "/api/tournaments/:id/teams/:teamId", "—", "Detach one team."],
+    ["GET", "/api/tournaments/:id/saved-players", "—", "Saved players across the tournament."],
+  ]},
+
+  { name: "Stages", mount: "/api/stages", desc: "", rows: [
+    ["GET", "/api/stages", "query: tournamentId", "List stages, optionally scoped to a tournament."],
+    ["POST", "/api/stages", "body: stage document", "Create stage."],
+    ["PUT", "/api/stages/:id", "body: partial document", "Update stage."],
+    ["DELETE", "/api/stages/:id", "—", "Delete stage."],
+    ["POST", "/api/stages/copy", "body: { stageIds: string[], targetTournamentId }", "Copy stages into another tournament."],
+    ["POST", "/api/stages/move", "body: { stageIds: string[], targetTournamentId }", "Move stages to another tournament."],
+    ["GET", "/api/stages/:id/details", "—", "Stage games + teams."],
+    ["GET", "/api/stages/:id/teams", "—", "Teams in stage."],
+    ["POST", "/api/stages/:id/games", "body: { gameId }", "Attach game to stage."],
+    ["DELETE", "/api/stages/:stageId/games/:gameId", "—", "Detach game."],
+    ["POST", "/api/stages/:id/teams", "body: { teamId }", "Attach team to stage."],
+    ["DELETE", "/api/stages/:stageId/teams/:teamId", "—", "Detach team."],
+    ["GET", "/api/stages/:id/saved-players", "—", "Saved players for the stage."],
+  ]},
+
+  { name: "Games", mount: "/api/games", desc: "", rows: [
+    ["GET", "/api/games", "—", "List saved games."],
+    ["GET", "/api/games/:id", "—", "Single game."],
+    ["POST", "/api/games", "body: { ip, title, stageId }", "Pull match data from the PUBG server at ip and save it."],
+    ["PUT", "/api/games/:id", "body: partial game document", "Update game."],
+    ["DELETE", "/api/games/:id", "—", "Hard-delete and remove from its stage."],
+  ]},
+
+  { name: "Players", mount: "/api/players", desc: "", rows: [
+    ["GET", "/api/players/unique", "—", "Deduplicated player list across games."],
+    ["POST", "/api/players", "body: { name, team, key, uid }", "Create a standalone player not yet in any game."],
+    ["POST", "/api/players/assets", "body: { playerId, images, firstBloodImage, mvpPvpImage }", "Upsert/replace player images."],
+    ["PUT", "/api/players/override", "body: { playerKey, name, team, uid }", "Persist name/team/uid overrides."],
+    ["DELETE", "/api/players/:playerKey", "—", "Delete standalone/override record."],
+  ]},
+
+  { name: "Live control — PUBG", mount: "/api/live", desc: "Drives the broadcast overlays. Most POSTs return quickly and take effect through Socket.IO.", rows: [
+    ["GET", "/api/live/game-info", "query: ip, quick (0 disables quick check)", "Poll the PUBG game server for live match state."],
+    ["GET", "/api/live/teams", "query: ip", "Teams straight from the game API."],
+    ["POST", "/api/live/start", "body: { ip, firstBlood, teams }", "Start live tracking + overlays."],
+    ["POST", "/api/live/end", "—", "End live session."],
+    ["POST", "/api/live/hide-table", "—", "Hide teams table."],
+    ["POST", "/api/live/show-table", "—", "Show teams table."],
+    ["POST", "/api/live/hide-top-four", "—", "Hide top-four widget."],
+    ["POST", "/api/live/show-top-four", "—", "Show top-four widget."],
+    ["POST", "/api/live/hud-visibility", "body: visibility flags object", "Toggle individual HUD sections."],
+    ["POST", "/api/live/reset-hud", "—", "Restore default HUD visibility."],
+    ["POST", "/api/live/force-stop-overlays", "—", "Kill every running overlay animation."],
+    ["POST", "/api/live/test-team-dead", "body: team-dead test payload", "Fire the team-death overlay for testing."],
+    ["GET", "/api/live/hud-theme", "—", "Current theme snapshot."],
+    ["POST", "/api/live/hud-theme", "body: partial theme (validated)", "Deep-merge patch of the live theme."],
+    ["POST", "/api/live/hud-theme/reset", "—", "Restore factory defaults."],
+    ["POST", "/api/live/hud-theme/test-outside-zone", "body: { durationMs? }", "Preview the outside-zone alert. Clamped 1–15 s, default 5 s."],
+    ["GET", "/api/live/hud-theme-presets", "—", "List saved presets (MongoDB)."],
+    ["POST", "/api/live/hud-theme-presets", "body: { name, theme? }", "Save current theme as a preset."],
+    ["POST", "/api/live/hud-theme-presets/:id/apply", "—", "Apply a stored preset to the live HUD."],
+    ["DELETE", "/api/live/hud-theme-presets/:id", "—", "Delete a preset."],
+    ["POST", "/api/live/upload-icon", "body: { type, data }", "Upload grenade/vehicle icon as base64."],
+    ["POST", "/api/live/preview-freeze", "body: { section, frozen, data }", "Freeze/unfreeze a broadcast preview section."],
+  ]},
+
+  { name: "Live control — solo", mount: "/api/solo-live", desc: "", rows: [
+    ["POST", "/api/solo-live/start", "body: { ip, firstBlood }", "Start solo live tracking."],
+    ["POST", "/api/solo-live/simulate", "body: { speed }", "Replay/simulate a solo match."],
+    ["POST", "/api/solo-live/simulate-speed", "body: { speed }", "Change simulation speed mid-run."],
+    ["POST", "/api/solo-live/end", "—", "End solo session."],
+    ["POST", "/api/solo-live/hide-table", "—", "Hide solo table."],
+    ["POST", "/api/solo-live/show-table", "—", "Show solo table."],
+    ["POST", "/api/solo-live/hide-top-four", "—", "Hide solo top four."],
+    ["POST", "/api/solo-live/show-top-four", "—", "Show solo top four."],
+    ["GET", "/api/solo-live/players", "query: ip", "Solo players from the game server."],
+  ]},
+
+  { name: "Honor of Kings", mount: "/api/hok", desc: "Talks to the HOK match API (HOK_BASE_URL) with a signed request.", rows: [
+    ["POST", "/api/hok/live/start", "—", "Start HOK live session."],
+    ["POST", "/api/hok/live/pick-ban/start", "—", "Start pick &amp; ban polling."],
+    ["POST", "/api/hok/live/pick-ban/stop", "—", "Stop pick &amp; ban polling."],
+    ["POST", "/api/hok/live/games-data/start", "body: { gameId }", "Start live game-data polling."],
+    ["POST", "/api/hok/live/games-data/stop", "—", "Stop live game-data polling."],
+    ["GET", "/api/hok/game-info", "—", "Current HOK game info."],
+    ["GET", "/api/hok/topbar", "—", "Top-bar overlay data."],
+    ["POST", "/api/hok/post-game/players-table", "body: { gameId }", "Push post-game players table to overlays."],
+    ["POST", "/api/hok/post-game/players-info", "body: { gameId }", "Push post-game player info."],
+    ["POST", "/api/hok/post-game/game-timeline", "body: { gameId }", "Push post-game timeline."],
+    ["POST", "/api/hok/testing/start", "—", "Replay stored HOK data for testing."],
+  ]},
+
+  { name: "Tournament stats &amp; MVP", mount: "/api/tournament", desc: "", rows: [
+    ["GET", "/api/tournament/stage/:id", "—", "Aggregated player stats for a stage."],
+    ["PUT", "/api/tournament/stage/:stageId/player-stat", "body: { playerName, field, value }", "Manual override of one stat field."],
+    ["GET", "/api/tournament/:tournamentId/mvp-stats", "query: stageId", "MVP standings for the tournament (optionally one stage)."],
+    ["GET", "/api/tournament/mvp", "—", "Cached MVP payload."],
+    ["POST", "/api/tournament/mvp", "body: MVP payload", "Cache MVP payload for overlays."],
+    ["POST", "/api/tournament/mvp/reset", "—", "Clear MVP cache."],
+    ["GET", "/api/tournament/players-to-watch", "—", "Cached players-to-watch payload."],
+    ["POST", "/api/tournament/players-to-watch", "body: payload", "Cache players-to-watch."],
+    ["POST", "/api/tournament/players-to-watch/reset", "—", "Clear it."],
+  ]},
+
+  { name: "Tournament MVP overlay", mount: "/api/tourMvp", desc: "", rows: [
+    ["GET", "/api/tourMvp", "—", "Cached tournament-MVP overlay payload."],
+    ["POST", "/api/tourMvp", "body: payload", "Cache payload."],
+    ["POST", "/api/tourMvp/reset", "—", "Clear cache."],
+  ]},
+
+  { name: "Tournament results", mount: "/api/tourResult", desc: "Cached payloads are what the overlay reads; compute/from-* endpoints calculate without caching.", rows: [
+    ["GET", "/api/tourResult", "—", "Cached tournament result."],
+    ["POST", "/api/tourResult", "body: result payload", "Cache result for the overlay."],
+    ["POST", "/api/tourResult/reset", "—", "Clear cache."],
+    ["POST", "/api/tourResult/compute", "body: { gameIds: string[], title }", "Compute from specific saved games."],
+    ["GET", "/api/tourResult/from-stage/:stageId", "—", "Compute from every game in a stage. Does not cache."],
+    ["GET", "/api/tourResult/from-ip", "query: ip", "Compute from a live PUBG server. Does not cache."],
+    ["GET", "/api/tourResult/modifiers/:stageId", "—", "Stored point modifiers for a stage."],
+    ["PUT", "/api/tourResult/modifier", "body: { stageId, teamName, modifier, note }", "Upsert one team's modifier."],
+    ["DELETE", "/api/tourResult/modifier", "body: { stageId, teamName }", "Clear one team's modifier."],
+  ]},
+
+  { name: "Match results", mount: "/api/matchResults", desc: "Note the mount is plural — /api/matchResults — even though the source comments say /api/matchResult.", rows: [
+    ["GET", "/api/matchResults", "—", "Cached single-match result."],
+    ["POST", "/api/matchResults", "body: result payload", "Cache result."],
+    ["POST", "/api/matchResults/reset", "—", "Clear cache."],
+    ["POST", "/api/matchResults/compute", "body: { gameId, title?, matchNumber? }", "Compute from a saved game."],
+    ["GET", "/api/matchResults/from-ip", "query: ip, title, matchNumber", "Compute live from the game server. Does not cache."],
+  ]},
+
+  { name: "Match summary", mount: "/api/matchSummary", desc: "", rows: [
+    ["GET", "/api/matchSummary", "—", "Cached summary the overlay reads."],
+    ["POST", "/api/matchSummary", "body: summary payload", "Cache summary (\"Send to Overlay\")."],
+    ["POST", "/api/matchSummary/reset", "—", "Clear cache."],
+    ["POST", "/api/matchSummary/compute", "body: { gameId, title?, matchNumber? }", "Compute from a saved game."],
+    ["GET", "/api/matchSummary/from-ip", "query: ip, title, matchNumber", "Compute live from a game client."],
+  ]},
+
+  { name: "Team vs team", mount: "/api/tvt", desc: "", rows: [
+    ["GET", "/api/tvt", "—", "Cached TvT payload with absolute image URLs."],
+    ["POST", "/api/tvt", "body: { gameId, ip, teamNames, title, matchNumber }", "Compute, cache and return the payload."],
+    ["POST", "/api/tvt/reset", "—", "Clear cache."],
+  ]},
+
+  { name: "Stats ingest", mount: "/api/stats", desc: "The two dump endpoints are the machine-to-machine ingest path and need no API key.", rows: [
+    ["GET", "/api/stats/post-game", "query: ip, gameId", "Post-game stats from a live server or a saved game."],
+    ["POST", "/api/stats/dump", "body: [teamWonStats, playersStats]", "No key needed. Stores both, writes jsons/, emits players-stats-updated."],
+    ["GET", "/api/stats/dump", "—", "Raw cached dump: { teamWonStats, playersStats }."],
+    ["POST", "/api/stats/dump-post-game", "body: [teamWonStats, playersStats]", "No key needed. Backward-compatible alias of /dump."],
+  ]},
+
+  { name: "JSON file store", mount: "/api/files", desc: "Read/write the server's jsons/ directory.", rows: [
+    ["GET", "/api/files", "—", "List stored JSON files."],
+    ["GET", "/api/files/:name", "—", "Read one file."],
+    ["POST", "/api/files", "body: { name, file }", "Save a JSON file."],
+    ["DELETE", "/api/files/:name", "—", "Delete a file."],
+  ]},
+
+  { name: "Testing mode", mount: "/api/testing", desc: "", rows: [
+    ["POST", "/api/testing/enable", "—", "Enable testing mode."],
+    ["POST", "/api/testing/disable", "—", "Disable testing mode."],
+    ["GET", "/api/testing/status", "—", "Current testing-mode state."],
+  ]},
+];
+
+const EXEMPT = new Set(["POST /api/stats/dump", "POST /api/stats/dump-post-game"]);
+const needsKey = (m, p) => m !== "GET" && !EXEMPT.has(m + " " + p);
+
+document.getElementById("groups").innerHTML = GROUPS.map(g => `
+  <h2>${g.name}<span class="mount">${g.mount}</span></h2>
+  ${g.desc ? `<p class="gdesc">${g.desc}</p>` : ""}
+  <table>
+    <thead><tr><th>Method</th><th>Path</th><th>Auth</th><th>Params / body</th><th>Notes</th></tr></thead>
+    <tbody>${g.rows.map(([m, p, params, note]) => `
+      <tr>
+        <td class="m ${m}">${m}</td>
+        <td class="p path">${p}</td>
+        <td class="a">${needsKey(m, p) ? '<span class="key">key</span>' : '<span class="open">open</span>'}</td>
+        <td><code>${params}</code></td>
+        <td>${note}</td>
+      </tr>`).join("")}
+    </tbody>
+  </table>
+`).join("");
+
+const total = GROUPS.reduce((n, g) => n + g.rows.length, 0);
+const countEl = document.getElementById("count");
+countEl.textContent = total + " endpoints";
+
+document.getElementById("q").addEventListener("input", e => {
+  const term = e.target.value.trim().toLowerCase();
+  let shown = 0;
+  document.querySelectorAll("#groups table").forEach(tbl => {
+    let any = false;
+    tbl.querySelectorAll("tbody tr").forEach(tr => {
+      const hit = !term || tr.textContent.toLowerCase().includes(term);
+      tr.classList.toggle("hidden", !hit);
+      if (hit) { any = true; shown++; }
+    });
+    tbl.classList.toggle("hidden", !any);
+    tbl.previousElementSibling.classList.toggle("hidden", !any);            // desc or h2
+    if (tbl.previousElementSibling.tagName === "P") {
+      tbl.previousElementSibling.previousElementSibling.classList.toggle("hidden", !any);
+    }
+  });
+  countEl.textContent = term ? `${shown} of ${total} endpoints` : `${total} endpoints`;
+});
+</script>
+</body>
+</html>

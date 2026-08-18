@@ -1,0 +1,59 @@
+{
+  "apiBase": "http://192.168.30.7:1080",
+  "assetBase": "http://192.168.30.7:4000",
+  "tournamentId": "69fc1373a966509c1353e8bf",
+  "tournamentLabel": "PMGO 2026",
+  "stageLabels": {
+    "Groups": "League",
+    "Finals": "Finals"
+  },
+  "scoring": {
+    "placement": {
+      "1": 10,
+      "2": 6,
+      "3": 5,
+      "4": 4,
+      "5": 3,
+      "6": 2,
+      "7": 1,
+      "8": 1
+    },
+    "perKill": 1
+  },
+  "assetFolders": {
+    "teamIcon": "teamsTwo",
+    "teamFlag": "teamsFlags",
+    "teamImage": "teamsOne"
+  },
+  "localMatchDir": "PMGO",
+  "playerPhotos": {
+    "pathTemplate": "PMGC 2026/PMGO/player kill/{team}/{player}.png",
+    "extensions": [
+      ".png",
+      ".PNG",
+      ".jpg",
+      ".jpeg",
+      ".webp"
+    ],
+    "teamFolderAliases": {
+      "THE HUNTERS": [
+        "HUNT Esports",
+        "HUNT"
+      ],
+      "Nigma Galaxy": [
+        "NGX",
+        "NGX Esports"
+      ],
+      "KHK Esports": [
+        "KHK ESPRORTS",
+        "KHK ESPORTS",
+        "KHK"
+      ]
+    },
+    "playerFileOverrides": {
+      "ngxKOOPS02": "PMGC 2026/PMGO/player kill/NGX/koopsz.png",
+      "ngxLORDū": "PMGC 2026/PMGO/player kill/NGX/lord0233.png",
+      "ngxSaTaN33ň": "PMGC 2026/PMGO/player kill/NGX/satan_0e.png"
+    }
+  }
+}
