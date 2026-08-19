@@ -2,7 +2,7 @@
    shows how each team actually got there. */
 
 import { store } from '../store.js';
-import { esc, num, panel, rgba, crest, dataTable } from '../ui.js';
+import { esc, num, panel, rgba, crest, dataTable, scoringRibbon } from '../ui.js';
 import { lineChart, heatmap, ramp } from '../charts.js';
 import { pageHead, standingsTable, scopeName } from './common.js';
 
@@ -10,8 +10,6 @@ export async function render({ scope }) {
   const rows = store.standingsIn(scope);
   const matches = store.matchesIn(scope);
   const meta = store.meta;
-  const placement = Object.entries(meta.scoring.placement)
-    .map(([k, v]) => `#${k} → ${v}`).join(' · ');
 
   const matchTeams = await fetch('data/matchteams.json').then(r => r.json());
 
@@ -28,15 +26,30 @@ export async function render({ scope }) {
   return {
     html: `${pageHead({
       crumb: `${esc(meta.tournament.label)} · ${esc(scopeName(scope))}`,
-      title: 'Standings',
-      sub: `${rows.length} teams over ${matches.length} matches. Placement points: ${placement}; ${meta.scoring.perKill} point per kill.`,
+      title: 'Tournament Standings',
+      sub: `Overall leaderboard, points progression, and per-match performance across all ${matches.length} stage matches.`,
+      metaBadges: [
+        { text: `${rows.length} Teams`, cls: 'gold' },
+        { text: `${matches.length} Matches`, cls: '' },
+        { text: `Phase: ${esc(scopeName(scope))}`, cls: '' },
+      ],
     })}
-    ${panel('', standingsTable(scope))}
-    ${panel('Points race', race + legend(rows), {
-      note: 'Cumulative points after every match in this stage.',
+    ${scoringRibbon(meta.scoring, {
+      stageLabel: scopeName(scope),
+      teamsCount: rows.length,
+      matchesCount: matches.length,
     })}
-    ${panel('Placement grid', grid, {
-      note: 'Every team’s finish in every match — colour is the placement points earned. Hover a cell for detail.',
+    ${panel('Official Leaderboard', standingsTable(scope), {
+      icon: 'trophy',
+      note: 'Ranked by total points. Top 3 receive gold, silver and bronze broadcast tiers. Click any team row to view roster and game logs.',
+    })}
+    ${panel('Points race progression', race + legend(rows), {
+      icon: 'activity',
+      note: 'Cumulative points trajectory after every match in this stage.',
+    })}
+    ${panel('Match-by-match placement grid', grid, {
+      icon: 'target',
+      note: 'Every team’s finish in every match — cell color intensity reflects placement points earned. Hover a cell for full match details.',
     })}`,
   };
 }

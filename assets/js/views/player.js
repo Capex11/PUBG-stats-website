@@ -3,10 +3,10 @@
 
 import { store } from '../store.js';
 import {
-  esc, num, pct, dur, dateOf, panel, tile, crest, avatar, rgba, dataTable,
-  rankClass, bindTables, bindTooltips, el, skeleton,
+  esc, num, pct, dur, panel, tile, crest, avatar, rgba, el, els,
+  dataTable, rankClass, bindTables, bindTooltips, skeleton,
 } from '../ui.js';
-import { lineChart, barChart, radarChart, donut } from '../charts.js';
+import { radarChart, lineChart, donut, barChart } from '../charts.js';
 import { pageHead, scopeName, weaponName, weaponsNamed } from './common.js';
 import { icon } from '../icons.js';
 
@@ -45,41 +45,46 @@ export async function render({ params, scope }) {
     ${team ? `<a class="chip" href="#/teams/${team.id}">${esc(team.name)}</a>` : ''}
   </div>`;
 
-  const hero = `<section class="panel" style="position:relative;overflow:hidden">
-    <div style="position:absolute;inset:-70% 55% 30% -25%;background:radial-gradient(circle,${rgba(team?.color || '#6f8cff', .35)},transparent 65%);filter:blur(45px)"></div>
-    <div style="position:relative;display:flex;gap:20px;align-items:center;flex-wrap:wrap">
-      ${avatar(player, team, 'xl')}
-      <div style="flex:1;min-width:220px">
-        <div class="crumb">${esc(store.meta.tournament.label)} · ${esc(scopeName(scope))}</div>
-        <h1 style="font-size:32px">${esc(player.name)}</h1>
-        <div class="chips" style="margin-top:8px">
-          ${team ? `<a class="badge" href="#/teams/${team.id}" style="gap:6px">${crest(team, 'sm')} ${esc(team.name)}</a>` : ''}
-          <span class="badge">UID ${esc(player.uid)}</span>
-          <span class="badge">${s.matches} matches</span>
-          ${s.mvps ? `<span class="badge gold">${s.mvps} match MVP${s.mvps > 1 ? 's' : ''}</span>` : ''}
+  const hero = `<section class="hero-banner">
+    <div class="hero-glow-bg" style="background:radial-gradient(circle, ${rgba(team?.color || '#6f8cff', .45)}, transparent 65%)"></div>
+    <div style="position:relative;display:flex;gap:24px;align-items:center;flex-wrap:wrap;justify-content:space-between">
+      <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+        ${avatar(player, team, 'xl')}
+        <div style="min-width:240px">
+          <div class="crumb">
+            <span class="badge gold">${esc(store.meta.tournament.label)}</span>
+            <span class="badge">${esc(scopeName(scope))}</span>
+          </div>
+          <h1 style="font-size:clamp(2rem, 3.5vw, 2.6rem);margin:4px 0 8px">${esc(player.name)}</h1>
+          <div class="chips">
+            ${team ? `<a class="badge" href="#/teams/${team.id}" style="gap:6px">${crest(team, 'sm')} ${esc(team.name)}</a>` : ''}
+            <span class="badge">UID: ${esc(player.uid)}</span>
+            <span class="badge">${s.matches} Matches</span>
+            ${s.mvps ? `<span class="badge gold">${s.mvps} Match MVP${s.mvps > 1 ? 's' : ''} 🍗</span>` : ''}
+          </div>
         </div>
       </div>
-      <div style="text-align:right">
-        <div class="tiny up dim">Rating index</div>
-        <div style="font-family:var(--display);font-size:44px;font-weight:700;line-height:1">${num(s.rating, 1)}</div>
-        <div class="tiny muted">#${s.ratingRank} of ${field.length} players</div>
+      <div style="text-align:right;background:var(--panel-2);padding:14px 20px;border-radius:var(--radius);border:1px solid var(--line-soft)">
+        <div class="tiny up dim">Overall Production Rating</div>
+        <div class="hero-figure" style="font-size:3rem;margin:2px 0;color:var(--accent)">${num(s.rating, 1)}</div>
+        <div class="tiny muted"><span class="badge gold" style="font-size:10px">#${s.ratingRank}</span> in field (${field.length} players)</div>
       </div>
     </div>
   </section>`;
 
   const tiles = `<div class="tiles">
-    ${tile('Kills', num(s.kills), `#${rankOf('kills')} · ${num(s.killsPerMatch, 2)} per match`)}
-    ${tile('Damage', num(s.damage), `#${rankOf('damage')} · ${num(s.damagePerMatch, 0)} per match`)}
-    ${tile('K/D', num(s.kd, 2), `${s.deaths} deaths in ${s.matches} matches`)}
-    ${tile('Team kill share', pct(s.kpRate), `#${rankOf('kpRate')} in the field`)}
+    ${tile('Total Kills', num(s.kills), `#${rankOf('kills')} in field · ${num(s.killsPerMatch, 2)} / match`, 'accent')}
+    ${tile('Combat Damage', num(s.damage), `#${rankOf('damage')} in field · ${num(s.damagePerMatch, 0)} / match`)}
+    ${tile('K/D Ratio', num(s.kd, 2), `${s.deaths} deaths in ${s.matches} matches`)}
+    ${tile('Team Kill Share', pct(s.kpRate), `#${rankOf('kpRate')} share in field`)}
     ${tile('Knockdowns', num(s.knockouts), `${num(s.kills / Math.max(1, s.knockouts), 2)} kills per knockdown`)}
-    ${tile('Assists', num(s.assists), `${num(s.assistsPerMatch, 2)} per match`)}
-    ${tile('Revives', num(s.rescues), `${s.selfRescues} self-revives`)}
-    ${tile('Avg survival', dur(s.avgSurvival), `alive at the end ${pct(s.survivalRate)}`)}
-    ${tile('Headshot kills', num(s.headshots), `${pct(s.hsRate)} of kills`)}
-    ${tile('Longest kill', `${num(s.longestKill)} m`, `#${rankOf('longestKill')} in the field`)}
-    ${tile('Damage / kill', num(s.damagePerKill, 0), `${num(s.damageTaken)} taken`)}
-    ${tile('Utility thrown', num(s.throwables), `${s.frags} frags · ${s.smokes} smokes · ${s.molotovs} molotovs`)}
+    ${tile('Assists', num(s.assists), `${num(s.assistsPerMatch, 2)} assists / match`)}
+    ${tile('Squad Revives', num(s.rescues), `${s.selfRescues} self-revives`)}
+    ${tile('Avg Survival Time', dur(s.avgSurvival), `endgame rate ${pct(s.survivalRate)}`)}
+    ${tile('Headshot Ratio', num(s.headshots), `${pct(s.hsRate)} of all kills`)}
+    ${tile('Longest Snipe', `${num(s.longestKill)} m`, `#${rankOf('longestKill')} in field`)}
+    ${tile('Damage / Kill', num(s.damagePerKill, 0), `${num(s.damageTaken)} dmg taken`)}
+    ${tile('Utility Deployed', num(s.throwables), `${s.frags} frags · ${s.smokes} smokes · ${s.molotovs} molotovs`)}
   </div>`;
 
   const radar = percentileRadar(player, s, field, team);

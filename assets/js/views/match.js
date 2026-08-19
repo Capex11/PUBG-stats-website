@@ -3,12 +3,12 @@
 
 import { store } from '../store.js';
 import {
-  esc, num, pct, dur, dateOf, timeOf, panel, tile, crest, avatar, rgba,
+  esc, num, pct, dur, dateOf, timeOf, panel, tile, crest, avatar, flagImg, rgba,
   dataTable, rankClass, barCell, bindTables, bindTooltips, el, els,
 } from '../ui.js';
-import { barChart, lineChart } from '../charts.js';
-import { pageHead, weaponName, weaponsNamed } from './common.js';
+import { lineChart, barChart, donut, seriesTable } from '../charts.js';
 import { icon } from '../icons.js';
+import { pageHead, weaponName, weaponsNamed } from './common.js';
 
 export async function render({ params }) {
   const key = params[0];
@@ -38,8 +38,13 @@ export async function render({ params }) {
   const head = pageHead({
     crumb: `${esc(store.meta.tournament.label)} · ${esc(m.stageLabel)}`,
     title: m.displayTitle,
-    sub: `${dateOf(m.startTime)} ${timeOf(m.startTime)} · ${dur(m.duration)} · ${m.teamCount} teams ·
-      ${m.playerCount} players · ${m.totalKills} kills${m.map ? ` · ${esc(m.map)}` : ''}`,
+    sub: `Broadcast replay scoreboard, combat telemetry, and player performance stats.`,
+    metaBadges: [
+      { text: m.map ? `🗺️ ${esc(m.map)}` : '🗺️ Match Map', cls: 'gold' },
+      { text: `${dateOf(m.startTime)} ${timeOf(m.startTime)}`, cls: '' },
+      { text: `⏱️ ${dur(m.duration)}`, cls: '' },
+      { text: `⚔️ ${m.totalKills} Eliminations`, cls: '' },
+    ],
     aside: `<div class="chips">
       ${prev ? `<a class="chip" href="#/matches/${prev.key}" rel="prev">${icon('chevronLeft', { size: 14 })} ${esc(prev.displayTitle)}</a>` : ''}
       ${next ? `<a class="chip" href="#/matches/${next.key}" rel="next">${esc(next.displayTitle)} ${icon('chevronRight', { size: 14 })}</a>` : ''}
@@ -51,35 +56,45 @@ export async function render({ params }) {
       const t = m.teams[i];
       if (!t) return '<div></div>';
       const team = store.team(t.id);
-      const pos = ['1st', '2nd', '3rd'][t.rank - 1] || `${t.rank}th`;
+      const posLabels = ['1st Place', '2nd Place', '3rd Place'];
+      const posBadges = ['gold', 'silver', 'bronze'];
+      const pos = posLabels[t.rank - 1] || `${t.rank}th Place`;
       const topFrag = t.players[0];
       return `<a class="slot p${t.rank}" href="#/teams/${t.id}">
-        <div style="position:absolute;inset:-50% 30% 60% -30%;background:radial-gradient(circle,${rgba(team?.color || '#6f8cff', .3)},transparent 70%);filter:blur(30px)"></div>
+        <div style="position:absolute;inset:-50% 30% 60% -30%;background:radial-gradient(circle,${rgba(team?.color || '#6f8cff', .35)},transparent 70%);filter:blur(30px)"></div>
         <div style="position:relative">
-          <div class="pos">${pos}${t.rank === 1 ? ' · WWCD' : ''}</div>
-          <div style="margin:10px 0 6px">${crest(team, t.rank === 1 ? 'lg' : '')}</div>
-          <div style="font-family:var(--display);font-size:${t.rank === 1 ? 22 : 18}px;font-weight:700">${esc(t.name)}</div>
-          <div class="num" style="font-size:26px;margin-top:6px">${t.points}<span class="tiny dim"> pts</span></div>
-          <div class="tiny dim">${t.placementPoints} placement + ${t.kills} kills</div>
-          <div class="tiny muted" style="margin-top:6px">top frag ${esc(topFrag?.name || '—')} (${topFrag?.kills ?? 0})</div>
+          <span class="badge ${posBadges[t.rank - 1] || ''}" style="margin-bottom:8px">${t.rank === 1 ? '🍗 WWCD · ' : ''}${pos}</span>
+          <div style="margin:12px 0 8px">${crest(team, t.rank === 1 ? 'lg' : '')}</div>
+          <div style="font-family:var(--display);font-size:${t.rank === 1 ? 23 : 19}px;font-weight:800">${esc(t.name)}</div>
+          <div class="num" style="font-size:28px;font-weight:800;margin-top:8px;color:var(--text)">${t.points}<span class="tiny dim"> pts</span></div>
+          <div class="tiny dim" style="margin-top:2px">${t.placementPoints} placement + ${t.kills} kills</div>
+          <div class="tiny muted" style="margin-top:8px;background:var(--panel-2);padding:4px 8px;border-radius:4px">Top Fragger: <b>${esc(topFrag?.name || '—')}</b> (${topFrag?.kills ?? 0}K)</div>
         </div>
       </a>`;
     }).join('')}
   </div>`;
 
   const tiles = `<div class="tiles">
-    ${tile('Kills', m.totalKills, `${num(m.totalKills / m.teamCount, 1)} per team`)}
-    ${tile('Damage', num(m.teams.reduce((a, t) => a + t.damage, 0)), 'all teams')}
-    ${tile('Knockdowns', num(m.teams.reduce((a, t) => a + t.knockouts, 0)), 'before finishes')}
-    ${tile('Length', dur(m.duration), m.fightStartTime ? `first contact ${dur(m.fightStartTime - m.startTime)}` : '')}
-    ${m.mvp ? tile('MVP', `<span class="tile-text">${esc(m.mvp.name)}</span>`,
+    ${tile('Total Eliminations', m.totalKills, `${num(m.totalKills / m.teamCount, 1)} per team`, 'accent')}
+    ${tile('Squad Damage', num(m.teams.reduce((a, t) => a + t.damage, 0)), 'all teams')}
+    ${tile('Total Knockdowns', num(m.teams.reduce((a, t) => a + t.knockouts, 0)), 'before finishes')}
+    ${tile('Match Duration', dur(m.duration), m.fightStartTime ? `first contact ${dur(m.fightStartTime - m.startTime)}` : '')}
+    ${m.mvp ? tile('Match MVP', `<span class="tile-text">${esc(m.mvp.name)}</span>`,
       `${m.mvp.kills} kills · ${num(m.mvp.damage)} dmg`, 'accent') : ''}
-    ${tile('Kill feed', `${Math.round((m.killLog.coverage || 0) * 100)}%`, `${m.killLog.events} events logged`)}
+    ${tile('Kill Feed Logs', `${Math.round((m.killLog.coverage || 0) * 100)}%`, `${m.killLog.events} events mapped`)}
   </div>`;
 
   const maxPoints = Math.max(...m.teams.map(t => t.points));
   const teamCols = [
-    { label: '#', get: t => t.rank, cls: 'rank', left: true, fmt: v => v },
+    {
+      label: '#', get: t => t.rank, cls: 'rank', left: true,
+      fmt: v => {
+        if (v === 1) return `<span class="badge gold" style="min-width:30px;justify-content:center;font-weight:800">#1</span>`;
+        if (v === 2) return `<span class="badge silver" style="min-width:30px;justify-content:center;font-weight:800">#2</span>`;
+        if (v === 3) return `<span class="badge bronze" style="min-width:30px;justify-content:center;font-weight:800">#3</span>`;
+        return `<span style="padding-left:6px">#${v}</span>`;
+      },
+    },
     {
       label: 'Team', left: true, get: t => t.name, fmt: (v, t) => {
         const team = store.team(t.id);

@@ -7,12 +7,19 @@ import {
 } from '../ui.js';
 import { sparkline } from '../charts.js';
 
-export function pageHead({ crumb, title, sub, aside = '' }) {
+export function pageHead({ crumb, title, sub, metaBadges = [], aside = '' }) {
+  const badgesHtml = metaBadges.length
+    ? `<div class="chips" style="margin-top:8px">${metaBadges.map(b =>
+        typeof b === 'string' ? `<span class="badge">${b}</span>` : `<span class="badge ${b.cls || ''}">${b.text}</span>`
+      ).join('')}</div>`
+    : '';
+
   return `<div class="page-head">
     <div class="titles">
       ${crumb ? `<div class="crumb">${crumb}</div>` : ''}
       <h1>${esc(title)}</h1>
       ${sub ? `<p>${sub}</p>` : ''}
+      ${badgesHtml}
     </div>
     ${aside}
   </div>`;
@@ -31,7 +38,15 @@ export function standingsTable(scope, opts = {}) {
   const limit = opts.limit ? rows.slice(0, opts.limit) : rows;
 
   const cols = [
-    { label: '#', get: r => r.rank, cls: 'rank', left: true, fmt: v => v },
+    {
+      label: '#', get: r => r.rank, cls: 'rank', left: true,
+      fmt: v => {
+        if (v === 1) return `<span class="badge gold" style="min-width:30px;justify-content:center;font-weight:800">#1</span>`;
+        if (v === 2) return `<span class="badge silver" style="min-width:30px;justify-content:center;font-weight:800">#2</span>`;
+        if (v === 3) return `<span class="badge bronze" style="min-width:30px;justify-content:center;font-weight:800">#3</span>`;
+        return `<span style="padding-left:6px">#${v}</span>`;
+      },
+    },
     {
       label: 'Team', left: true, get: r => r.name, fmt: (v, r) => {
         const t = store.team(r.id);
@@ -45,20 +60,23 @@ export function standingsTable(scope, opts = {}) {
       },
     },
     { label: 'M', get: r => r.matches, title: 'Matches played' },
-    { label: 'WWCD', get: r => r.wwcd, title: 'Winner winner chicken dinner', fmt: v => v ? `<span class="gold" style="color:var(--gold)">${v}</span>` : '<span class="dim">0</span>' },
+    {
+      label: 'WWCD', get: r => r.wwcd, title: 'Winner winner chicken dinner',
+      fmt: v => v ? `<span class="badge gold" style="padding:2px 8px;font-size:11px">${v} 🍗</span>` : '<span class="dim">0</span>',
+    },
     { label: 'Place', get: r => r.placementPoints, title: 'Placement points' },
     { label: 'Kills', get: r => r.kills },
     ...(hasModifier ? [{ label: 'Adj', get: r => r.modifier, title: 'Manual point adjustment', fmt: v => v ? `<span class="${v > 0 ? 'good' : 'bad'}">${v > 0 ? '+' : ''}${num(v)}</span>` : '<span class="dim">—</span>' }] : []),
     {
       label: 'Points', get: r => r.finalPoints, cls: 'strong',
-      fmt: (v, r) => barCell(v, maxPts, rgba(r.color, .9), x => num(x)),
+      fmt: (v, r) => barCell(v, maxPts, rgba(r.color, .95), x => num(x)),
     },
     { label: 'Avg #', get: r => r.avgRank, title: 'Average placement', fmt: v => num(v, 2) },
     { label: 'Top 4', get: r => r.top4, title: 'Top-4 finishes' },
     { label: 'Damage', get: r => r.damage },
     {
       label: 'Form', get: r => 0, title: 'Points per match through the stage',
-      fmt: (v, r) => sparkline(r.pointsSeries, { color: r.color, width: 74, height: 22 }) || '<span class="dim">—</span>',
+      fmt: (v, r) => sparkline(r.pointsSeries, { color: r.color, width: 78, height: 24 }) || '<span class="dim">—</span>',
     },
   ];
 
@@ -108,7 +126,7 @@ export function playersTable(scope, list, opts = {}) {
     {
       label: 'Rating', get: r => r.s.rating, cls: 'strong', title:
         'Rating index: weighted z-score of per-match production (50 = field average)',
-      fmt: (v, r) => barCell(v, maxRating, rgba(store.team(r.teamId)?.color || '#6f8cff', .9), x => num(x, 1)),
+      fmt: (v, r) => barCell(v, maxRating, rgba(store.team(r.teamId)?.color || '#6f8cff', .95), x => num(x, 1)),
     },
     { label: 'M', get: r => r.s.matches, title: 'Matches played' },
     ...PLAYER_COLS.core.map(c => ({ label: c.label, title: c.title, get: r => r.s[c.key] })),
@@ -116,7 +134,10 @@ export function playersTable(scope, list, opts = {}) {
       label: c.label, title: c.title, get: r => r.s[c.key],
       fmt: c.fmt || (v => num(v, c.d ?? 0)),
     })),
-    { label: 'MVP', get: r => r.s.mvps, title: 'Match MVPs (most kills in a match)', fmt: v => v ? `<b>${v}</b>` : '<span class="dim">0</span>' },
+    {
+      label: 'MVP', get: r => r.s.mvps, title: 'Match MVPs (most kills in a match)',
+      fmt: v => v ? `<span class="badge gold" style="padding:1px 7px;font-size:11px">${v} MVP</span>` : '<span class="dim">0</span>',
+    },
   ];
 
   return dataTable(rows, cols, {
@@ -129,10 +150,10 @@ export function playersTable(scope, list, opts = {}) {
 /* --------------------------------------------------------------- matches --- */
 export function matchRow(m) {
   const w = store.team(m.winner.id);
-  return `<a class="ident" href="#/matches/${m.key}" style="gap:9px;padding:9px 11px;border-radius:var(--radius-xs);background:var(--hover)">
-    <span class="badge nowrap">${esc(m.stageLabel)} G${m.number}</span>
+  return `<a class="ident" href="#/matches/${m.key}" style="gap:10px;padding:10px 14px;border-radius:var(--radius-sm);background:var(--panel-2);border:1px solid var(--line-soft);transition:all .15s var(--ease)">
+    <span class="badge gold nowrap">${esc(m.stageLabel)} G${m.number}</span>
     ${crest(w, 'sm')}
-    <span class="name" style="flex:1;min-width:0">${esc(m.winner.name)}</span>
+    <span class="name" style="flex:1;min-width:0;font-weight:600">${esc(m.winner.name)}</span>
     <span class="tiny dim nowrap">${m.totalKills} kills · ${dur(m.duration)}</span>
   </a>`;
 }
@@ -140,7 +161,7 @@ export function matchRow(m) {
 export function matchList(scope, limit) {
   const list = store.matchesIn(scope).slice().reverse().slice(0, limit || 999);
   if (!list.length) return '<div class="empty">No matches.</div>';
-  return `<div style="display:flex;flex-direction:column;gap:5px">${list.map(matchRow).join('')}</div>`;
+  return `<div style="display:flex;flex-direction:column;gap:6px">${list.map(matchRow).join('')}</div>`;
 }
 
 /* -------------------------------------------------------------- misc bits --- */

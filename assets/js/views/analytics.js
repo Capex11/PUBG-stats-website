@@ -3,11 +3,13 @@
 
 import { store } from '../store.js';
 import {
-  esc, num, pct, dur, panel, tile, crest, avatar, rgba, el, els, bindTooltips,
-  dataTable, barCell,
+  esc, num, pct, dur, panel, tile, crest, avatar, dataTable,
+  bindTables, bindTooltips, el, els, barCell,
 } from '../ui.js';
-import { barChart, lineChart, scatter, heatmap, ramp, donut, barsTable, chartData } from '../charts.js';
-import { pageHead, scopeName, killLogNotice, weaponName, weaponsNamed } from './common.js';
+import {
+  barChart, lineChart, heatmap, donut, scatter, ramp, barsTable, chartData,
+} from '../charts.js';
+import { pageHead, weaponName, weaponsNamed, scopeName, killLogNotice } from './common.js';
 
 export async function render({ scope }) {
   const a = store.analytics;
@@ -20,17 +22,22 @@ export async function render({ scope }) {
 
   const head = pageHead({
     crumb: `${esc(store.meta.tournament.label)} · ${esc(scopeName(scope))}`,
-    title: 'Analytics',
-    sub: `Everything derived from ${summary.matches} matches: ${num(summary.kills)} kills, ${num(summary.damage)} damage, ${num(store.meta.counts.killEvents)} kill-feed events.`,
+    title: 'Advanced Analytics & Meta Breakdown',
+    sub: `Deep-dive telemetry derived from ${summary.matches} matches, including weapon combat ranges, time-to-kill pacing, and team matchup matrices.`,
+    metaBadges: [
+      { text: `${summary.matches} Matches Analyzed`, cls: 'gold' },
+      { text: `${num(summary.kills)} Total Eliminations`, cls: '' },
+      { text: `${num(store.meta.counts.killEvents)} Feed Events Processed`, cls: '' },
+    ],
   });
 
   const tiles = `<div class="tiles">
-    ${tile('Kills / match', num(summary.killsPerMatch, 1), `${num(summary.kills)} total`)}
-    ${tile('Damage / match', num(summary.damage / Math.max(1, summary.matches), 0), `${num(summary.damage)} total`)}
-    ${tile('Avg match length', dur(summary.avgDuration), 'start to last squad standing')}
-    ${tile('Median kill range', `${num(distance.median)} m`, `p90 ${num(distance.p90)} m · max ${num(distance.max)} m`)}
-    ${tile('Knock → finish', pct(100 * (weapons.playerKills || 0) / Math.max(1, weapons.knocks)), `${num(weapons.knocks)} knockdowns logged`)}
-    ${tile('Zone deaths', num(summary.zoneDeaths), `${pct(100 * summary.zoneDeaths / Math.max(1, summary.kills))} of all deaths`)}
+    ${tile('Kills / Match', num(summary.killsPerMatch, 1), `${num(summary.kills)} total kills`, 'accent')}
+    ${tile('Damage / Match', num(summary.damage / Math.max(1, summary.matches), 0), `${num(summary.damage)} total damage`)}
+    ${tile('Avg Match Duration', dur(summary.avgDuration), 'drop to final circle')}
+    ${tile('Median Kill Range', `${num(distance.median)} m`, `p90 ${num(distance.p90)} m · max ${num(distance.max)} m`)}
+    ${tile('Knock Conversion', pct(100 * (weapons.playerKills || 0) / Math.max(1, weapons.knocks)), `${num(weapons.knocks)} knockdowns recorded`)}
+    ${tile('Blue Zone Deaths', num(summary.zoneDeaths), `${pct(100 * summary.zoneDeaths / Math.max(1, summary.kills))} of all deaths`)}
   </div>`;
 
   /* ---- leaderboards ---- */
@@ -161,10 +168,8 @@ export async function render({ scope }) {
               x => num(x, Number.isInteger(x) ? 0 : 2)),
           },
         ], { sortCol: 0, sortDir: 'asc', href: r => `#/players/${r.id}` });
-        import('../ui.js').then(ui => {
-          ui.bindTables(el('#lb-body', root));
-          ui.bindTooltips(el('#lb-body', root));
-        });
+        bindTables(el('#lb-body', root));
+        bindTooltips(el('#lb-body', root));
       };
       draw(boardKeys[0]);
       els('#lb-chips .chip', root).forEach(chip => chip.addEventListener('click', () => {

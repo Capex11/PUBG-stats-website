@@ -109,7 +109,7 @@ export function tile(label, value, sub = '', cls = '') {
 export function panel(title, body, opts = {}) {
   const heading = title
     ? `<div class="panel-head">
-        <h2>${opts.icon ? `<span class="panel-icon" aria-hidden="true">${icon(opts.icon, { size: 16 })}</span>` : ''}${esc(title)}</h2>
+        <h2>${opts.icon ? `<span class="panel-icon" aria-hidden="true">${icon(opts.icon, { size: 18 })}</span>` : ''}${esc(title)}</h2>
         ${opts.aside || ''}
       </div>`
     : '';
@@ -118,6 +118,41 @@ export function panel(title, body, opts = {}) {
     ${body}
     ${opts.note ? `<p class="panel-note">${opts.note}</p>` : ''}
   </section>`;
+}
+
+export function scoringRibbon(scoring, opts = {}) {
+  if (!scoring) return '';
+  const placement = scoring.placement || {};
+  const perKill = scoring.perKill ?? 1;
+  const entries = Object.entries(placement);
+
+  const chips = entries.map(([rank, pts]) => {
+    const rNum = Number(rank);
+    let cls = 'rule-chip';
+    if (rNum === 1) cls += ' r1';
+    else if (rNum === 2) cls += ' r2';
+    else if (rNum === 3) cls += ' r3';
+    return `<span class="${cls}"><span class="pos">#${rank}</span><span class="pts">${pts} pt${pts > 1 ? 's' : ''}</span></span>`;
+  });
+
+  chips.push(`<span class="rule-chip kill"><span class="pos">⚡ Kill</span><span class="pts">+${perKill} pt</span></span>`);
+
+  const metaPills = [];
+  if (opts.stageLabel) metaPills.push(`<span class="meta-pill">Stage: <b>${esc(opts.stageLabel)}</b></span>`);
+  if (opts.teamsCount) metaPills.push(`<span class="meta-pill">Teams: <b>${opts.teamsCount}</b></span>`);
+  if (opts.matchesCount) metaPills.push(`<span class="meta-pill">Matches: <b>${opts.matchesCount}</b></span>`);
+
+  return `<div class="rules-ribbon">
+    <div class="rules-ribbon-head">
+      <div class="rules-ribbon-title">
+        <span class="panel-icon" aria-hidden="true">${icon('trophy', { size: 15 })}</span>
+        <span>Tournament Scoring System</span>
+        <span class="tag">Official PMGO Rules</span>
+      </div>
+      ${metaPills.length ? `<div class="meta-strip">${metaPills.join('')}</div>` : ''}
+    </div>
+    <div class="rules-chips">${chips.join('')}</div>
+  </div>`;
 }
 
 export function rankClass(rank) {

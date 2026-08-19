@@ -128,6 +128,9 @@ function animateNumbers(root) {
 }
 
 async function route() {
+  if (!store.meta || !store.analytics) {
+    try { await store.load(); } catch (e) { return; }
+  }
   const p = path();
   renderNav();
   const hit = ROUTES.find(([re]) => re.test(p));

@@ -2,10 +2,10 @@
 
 import { store } from '../store.js';
 import {
-  esc, num, pct, dur, dateOf, panel, tile, crest, flagImg, avatar, rgba,
-  dataTable, rankClass, barCell, skeleton,
+  esc, num, pct, dur, dateOf, panel, tile, crest, avatar, flagImg, rgba,
+  dataTable, barCell, bindTables, bindTooltips, skeleton, rankClass,
 } from '../ui.js';
-import { lineChart, barChart, donut, radarChart } from '../charts.js';
+import { radarChart, lineChart, barChart, donut, sparkline } from '../charts.js';
 import { pageHead, scopeName } from './common.js';
 import { icon } from '../icons.js';
 
@@ -40,37 +40,42 @@ function build(team, scope) {
     <a class="chip" href="#/teams">All teams</a>
   </div>`;
 
-  const hero = `<section class="panel" style="position:relative;overflow:hidden">
-    <div style="position:absolute;inset:-70% 55% 30% -25%;background:radial-gradient(circle,${rgba(team.color, .35)},transparent 65%);filter:blur(45px)"></div>
-    <div style="position:relative;display:flex;gap:20px;align-items:center;flex-wrap:wrap">
-      ${crest(team, 'xl')}
-      <div style="flex:1;min-width:220px">
-        <div class="crumb">${esc(store.meta.tournament.label)} · ${esc(scopeName(scope))}</div>
-        <h1 style="font-size:32px">${esc(team.name)}</h1>
-        <div class="chips" style="margin-top:8px">
-          <span class="badge">${esc(team.tag)}</span>
-          ${team.flag ? `<span class="badge" title="Region">${flagImg(team)}</span>` : ''}
-          <span class="badge ${s.rank <= 3 ? 'gold' : ''}">Rank #${s.rank} of ${allTeams.length}</span>
-          <span class="badge">${roster.length} players</span>
+  const hero = `<section class="hero-banner">
+    <div class="hero-glow-bg" style="background:radial-gradient(circle, ${rgba(team.color, .45)}, transparent 65%)"></div>
+    <div style="position:relative;display:flex;gap:24px;align-items:center;flex-wrap:wrap;justify-content:space-between">
+      <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+        ${crest(team, 'xl')}
+        <div style="min-width:240px">
+          <div class="crumb">
+            <span class="badge gold">${esc(store.meta.tournament.label)}</span>
+            <span class="badge">${esc(scopeName(scope))}</span>
+          </div>
+          <h1 style="font-size:clamp(2rem, 3.5vw, 2.6rem);margin:4px 0 8px">${esc(team.name)}</h1>
+          <div class="chips">
+            <span class="badge ${s.rank === 1 ? 'gold' : s.rank === 2 ? 'silver' : s.rank === 3 ? 'bronze' : ''}">Rank #${s.rank} of ${allTeams.length}</span>
+            <span class="badge">${esc(team.tag)}</span>
+            ${team.flag ? `<span class="badge" title="Region">${flagImg(team)} Region</span>` : ''}
+            <span class="badge">${roster.length} Players</span>
+          </div>
         </div>
       </div>
-      <div style="text-align:right">
-        <div class="tiny up dim">Points</div>
-        <div style="font-family:var(--display);font-size:44px;font-weight:700;line-height:1">${num(s.finalPoints)}</div>
+      <div style="text-align:right;background:var(--panel-2);padding:14px 20px;border-radius:var(--radius);border:1px solid var(--line-soft)">
+        <div class="tiny up dim">Total Stage Points</div>
+        <div class="hero-figure" style="font-size:3rem;margin:2px 0">${num(s.finalPoints)}</div>
         <div class="tiny muted">${num(s.placementPoints)} placement + ${num(s.kills)} kills${s.modifier ? ` ${s.modifier > 0 ? '+' : ''}${num(s.modifier)} adj` : ''}</div>
       </div>
     </div>
   </section>`;
 
   const tiles = `<div class="tiles">
-    ${tile('Matches', s.matches, `${s.wwcd} WWCD · ${s.top4} top-4`)}
-    ${tile('Avg placement', num(s.avgRank, 2), `best #${s.bestRank} · worst #${s.worstRank}`)}
-    ${tile('Kills / match', num(s.killsPerMatch, 2), `${num(s.kills)} total`)}
-    ${tile('Damage / match', num(s.damagePerMatch, 0), `${num(s.damage)} total`)}
-    ${tile('Points / match', num(s.pointsPerMatch, 2), `σ ${num(s.consistency, 2)}`)}
-    ${tile('Kills per knockdown', num(s.kills / Math.max(1, s.knockouts), 2), `${num(s.knockouts)} knockdowns dealt`)}
-    ${tile('Revives', num(s.rescues), `${num(s.assists)} assists`)}
-    ${tile('WWCD rate', pct(s.wwcdRate), `top-4 ${pct(s.top4Rate)}`)}
+    ${tile('Matches Played', s.matches, `${s.wwcd} WWCD · ${s.top4} top-4`, 'accent')}
+    ${tile('Average Placement', `#${num(s.avgRank, 2)}`, `best #${s.bestRank} · worst #${s.worstRank}`)}
+    ${tile('Eliminations / Match', num(s.killsPerMatch, 2), `${num(s.kills)} total kills`)}
+    ${tile('Damage / Match', num(s.damagePerMatch, 0), `${num(s.damage)} total damage`)}
+    ${tile('Points / Match', num(s.pointsPerMatch, 2), `consistency σ ${num(s.consistency, 2)}`)}
+    ${tile('Finishing Conversion', num(s.kills / Math.max(1, s.knockouts), 2), `${num(s.knockouts)} knockdowns dealt`)}
+    ${tile('Squad Revives', num(s.rescues), `${num(s.assists)} assists`)}
+    ${tile('WWCD Win Rate', pct(s.wwcdRate), `top-4 rate ${pct(s.top4Rate)}`)}
   </div>`;
 
   /* roster table */
@@ -104,13 +109,13 @@ function build(team, scope) {
   const head = ranked.slice(0, 5);
   const tail = ranked.slice(5);
   const shareSlices = head.map((p, i) => ({
-    label: p.name, value: p.s.kills, color: shade(team.color, i, Math.max(2, head.length + (tail.length ? 1 : 0))),
+    label: p.name, value: p.s.kills, color: colorShade(team.color, i, Math.max(2, head.length + (tail.length ? 1 : 0))),
   }));
   if (tail.length) {
     shareSlices.push({
       label: `${tail.length} others`,
       value: tail.reduce((a, p) => a + p.s.kills, 0),
-      color: shade(team.color, head.length, head.length + 1),
+      color: colorShade(team.color, head.length, head.length + 1),
     });
   }
 
@@ -142,19 +147,19 @@ function build(team, scope) {
   return {
     html: `${nav}${hero}${tiles}
       ${panel('Roster', dataTable(roster, rosterCols, {
-        sortCol: 1, href: p => `#/players/${p.id}`, caption: `${team.name} roster`,
-      }), { icon: 'users' })}
+      sortCol: 1, href: p => `#/players/${p.id}`, caption: `${team.name} roster`,
+    }), { icon: 'users' })}
       <div class="grid g-2-1">
         ${panel('Points and kills by game', trends + `<div class="legend" style="margin-top:8px">
           <span><span class="sw" style="background:${team.color}"></span>Points</span>
           <span><span class="sw" style="background:#35d0ba"></span>Kills</span></div>`,
-          { icon: 'trophy', note: 'Points and kills earned in each game of this stage.' })}
+      { icon: 'trophy', note: 'Points and kills earned in each game of this stage.' })}
         ${panel('Kill share', `<div style="display:flex;justify-content:center">${donut({
-          slices: shareSlices, size: 200,
-          center: { top: num(s.kills), bottom: 'team kills' },
-        })}</div>
+        slices: shareSlices, size: 200,
+        center: { top: num(s.kills), bottom: 'team kills' },
+      })}</div>
         <div class="legend" style="margin-top:12px;justify-content:center">${shareSlices.map(sl =>
-          `<span><span class="sw" style="background:${sl.color}"></span>${esc(sl.label)} ${sl.value}</span>`).join('')}</div>`)}
+        `<span><span class="sw" style="background:${sl.color}"></span>${esc(sl.label)} ${sl.value}</span>`).join('')}</div>`)}
       </div>
       <div class="grid g-1-2">
         ${panel('Strengths vs field', radar.html, { note: radar.note })}
@@ -193,7 +198,6 @@ function build(team, scope) {
         sortCol: 0, sortDir: 'asc', href: r => `#/matches/${r.m.key}`,
         rowClass: r => rankClass(r.rec.rank),
       });
-      const { bindTables, bindTooltips } = await import('../ui.js');
       bindTables(root.querySelector('#team-log'));
       bindTooltips(root.querySelector('#team-log'));
     },
@@ -240,11 +244,11 @@ function teamRadar(team, s, allTeams) {
     }) + `<div class="legend" style="justify-content:center;margin-top:8px">
       <span><span class="sw" style="background:${team.color}"></span>${esc(team.name)}</span>
       <span><span class="sw" style="background:#6d7a91"></span>Field average</span></div>`,
-    note: 'Each axis is scaled between the worst and best team in this stage.',
+
   };
 }
 
-function shade(hex, i, n) {
+function colorShade(hex, i, n) {
   const t = n <= 1 ? 0 : i / (n - 1);
   const h = hex.replace('#', '');
   const v = parseInt(h.length === 3 ? h.split('').map(c => c + c).join('') : h, 16);

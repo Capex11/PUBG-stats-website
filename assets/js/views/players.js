@@ -11,15 +11,11 @@ export async function render({ scope }) {
   const all = store.playersIn(scope);
 
   const controls = `<div class="panel-head" style="margin-bottom:12px">
-    <div class="search-box" style="min-width:200px">
+    <div class="search-box" style="min-width:240px">
       <span class="icon" aria-hidden="true">${icon('search', { size: 15 })}</span>
-      <input id="pf-text" type="search" placeholder="Filter players…" style="width:100%"
+      <input id="pf-text" type="search" placeholder="Filter players by name or team…" style="width:100%"
         aria-label="Filter players by name or team">
     </div>
-    <label class="small muted">Min matches
-      <input id="pf-min" type="number" min="0" max="36" value="0"
-        style="width:64px;background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:6px 8px;margin-left:6px">
-    </label>
     <span class="small dim" id="pf-count"></span>
   </div>
   <div class="chips" id="pf-teams" role="group" aria-label="Filter by team" style="margin-bottom:14px">
@@ -31,20 +27,24 @@ export async function render({ scope }) {
   return {
     html: `${pageHead({
       crumb: `${esc(store.meta.tournament.label)} · ${esc(scopeName(scope))}`,
-      title: 'Players',
-      sub: `${all.length} players. Rating is a weighted z-score of per-match production — 50 is the field average, ±15 is one standard deviation.`,
-      aside: `<a class="chip" href="#/compare">Compare players →</a>`,
+      title: 'Player Performance Matrix',
+      sub: `Production rating, combat efficiency, survival times, and MVP honors across all ${all.length} competing athletes.`,
+      metaBadges: [
+        { text: `${all.length} Professional Players`, cls: 'gold' },
+        { text: `Field Rating Baseline: 50.0`, cls: '' },
+        { text: `Stage: ${esc(scopeName(scope))}`, cls: '' },
+      ],
+      aside: `<a class="chip on" href="#/compare/players">Head-to-Head Compare →</a>`,
     })}
     <section class="panel">
       ${controls}
       <div id="pf-table">${playersTable(scope, all)}</div>
     </section>`,
     mount(root) {
-      const state = { text: '', team: '', min: 0 };
+      const state = { text: '', team: '' };
       const draw = () => {
         const rows = all.filter(p =>
           (!state.team || p.teamId === state.team)
-          && p.s.matches >= state.min
           && (!state.text
             || p.name.toLowerCase().includes(state.text)
             || (p.teamName || '').toLowerCase().includes(state.text)));
@@ -56,10 +56,6 @@ export async function render({ scope }) {
       };
       el('#pf-text', root).addEventListener('input', ev => {
         state.text = ev.target.value.trim().toLowerCase();
-        draw();
-      });
-      el('#pf-min', root).addEventListener('input', ev => {
-        state.min = Number(ev.target.value) || 0;
         draw();
       });
       els('#pf-teams .chip', root).forEach(chip => chip.addEventListener('click', () => {

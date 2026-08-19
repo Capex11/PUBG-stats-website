@@ -60,10 +60,14 @@ export async function render({ params, scope }) {
 
   const head = pageHead({
     crumb: `${esc(store.meta.tournament.label)} · ${esc(scopeName(scope))}`,
-    title: 'Compare',
+    title: 'Head-to-Head Comparison',
     sub: mode === 'teams'
-      ? 'Pick two teams to put their stage numbers side by side.'
-      : 'Pick two players. Bars are scaled to the better value of the pair; the radar uses percentiles against everyone who played in this stage.',
+      ? 'Direct side-by-side metric comparison, radar overlay, and head-to-head combat records for two competing squads.'
+      : 'Side-by-side production breakdown, percentile radar, and combat efficiency profiles between two athletes.',
+    metaBadges: [
+      { text: `Mode: ${mode.toUpperCase()}`, cls: 'gold' },
+      { text: `Stage: ${esc(scopeName(scope))}`, cls: '' },
+    ],
     aside: `<div class="chips">
       <a class="chip ${mode === 'players' ? 'on' : ''}" href="#/compare/players/${esc(mode === 'players' ? ids.join(',') : '')}">Players</a>
       <a class="chip ${mode === 'teams' ? 'on' : ''}" href="#/compare/teams/${esc(mode === 'teams' ? ids.join(',') : '')}">Teams</a>

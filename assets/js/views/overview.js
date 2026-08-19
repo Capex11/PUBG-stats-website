@@ -21,45 +21,55 @@ export async function render({ scope }) {
     (b.s.assists + b.s.rescues * 2) - (a.s.assists + a.s.rescues * 2))[0];
   const longest = players.slice().sort((a, b) => b.s.longestKill - a.s.longestKill)[0];
 
-  const hero = `<section class="panel" style="position:relative;overflow:hidden">
-    <div style="position:absolute;inset:-60% 50% 40% -20%;background:radial-gradient(circle,${rgba(rows[0]?.color || '#ffb02e', .25)},transparent 65%);filter:blur(40px)"></div>
-    <div style="position:relative;display:flex;gap:22px;flex-wrap:wrap;align-items:center">
-      <div style="flex:1;min-width:260px">
-        <div class="crumb">${esc(meta.tournament.label)} · ${esc(scopeName(scope))}</div>
-        <h1 style="font-size:34px;margin:2px 0 8px">PUBG Mobile esports analytics</h1>
-        <p class="muted prose" style="margin:0">
-          Every game of the ${esc(scopeName(scope))} stage broken down:
-          ${summary.matches} games, ${rows.length} teams, ${players.length} players.
-          Scoring is ${Object.entries(meta.scoring.placement).slice(0, 3).map(([k, v]) => `#${k} = ${v}`).join(' · ')}
-          … plus ${meta.scoring.perKill} point per kill.
-          Switch stage with the ${store.scopes.map(x => esc(x.label)).join(' / ')} buttons above.
+  const hero = `<section class="hero-banner">
+    <div class="hero-glow-bg" style="background:radial-gradient(circle, ${rgba(rows[0]?.color || '#ffb02e', .35)}, transparent 65%)"></div>
+    <div style="position:relative;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+      <div style="flex:1;min-width:280px">
+        <div class="crumb">
+          <span class="badge gold">${esc(meta.tournament.label)}</span>
+          <span class="badge">${esc(scopeName(scope))} Stage</span>
+        </div>
+        <h1 style="font-size:clamp(2rem, 3.8vw, 2.75rem);margin:6px 0 10px;letter-spacing:-.01em">PUBG Mobile Esports Analytics</h1>
+        <p class="muted prose" style="margin:0;font-size:15px">
+          Live tournament telemetry and performance metrics for the <b>${esc(scopeName(scope))}</b> stage:
+          <b>${summary.matches}</b> matches, <b>${rows.length}</b> professional squads, and <b>${players.length}</b> competing athletes.
         </p>
-        <p class="tiny dim" style="margin-top:var(--s-3)">
-          ${meta.counts.matches} games across ${meta.stages.map(x => esc(x.label)).join(' and ')} ·
-          kill-feed coverage ${Math.round((meta.dataQuality.killLogCoverage || 0) * 100)}% ·
-          data generated ${esc(meta.generatedAt.replace('T', ' ').replace('Z', ' UTC'))}
-        </p>
+
+        <div class="rules-chips" style="margin:14px 0 14px">
+          ${Object.entries(meta.scoring.placement).slice(0, 4).map(([k, v]) =>
+            `<span class="rule-chip r${k}"><span class="pos">#${k}</span><span class="pts">${v} pts</span></span>`
+          ).join('')}
+          <span class="rule-chip kill"><span class="pos">⚡ Kill</span><span class="pts">+${meta.scoring.perKill} pt</span></span>
+          <a class="chip" href="#/standings" style="padding:4px 10px;font-size:12px;font-weight:700">Full Rules →</a>
+        </div>
+
+        <div class="meta-strip">
+          <span class="meta-pill">Matches Completed: <b>${summary.matches}</b></span>
+          <span class="meta-pill">Kill Feed Coverage: <b>${Math.round((meta.dataQuality.killLogCoverage || 0) * 100)}%</b></span>
+          <span class="meta-pill">Updated: <b>${esc(meta.generatedAt.replace('T', ' ').slice(0, 16))} UTC</b></span>
+        </div>
       </div>
-      ${rows[0] ? `<a href="#/teams/${rows[0].id}" style="display:flex;gap:16px;align-items:center;background:var(--hero-tint);border-radius:var(--radius);padding:14px 18px">
+
+      ${rows[0] ? `<a class="hero-leader-card" href="#/teams/${rows[0].id}">
         ${crest(store.team(rows[0].id), 'lg')}
         <div>
-          <div class="tiny up dim">${esc(scopeName(scope))} leader</div>
-          <div style="font-family:var(--display);font-size:24px;font-weight:700">${esc(rows[0].name)}</div>
+          <div class="badge gold" style="font-size:10px;margin-bottom:4px">👑 STAGE LEADER</div>
+          <div style="font-family:var(--display);font-size:24px;font-weight:800">${esc(rows[0].name)}</div>
           <div class="tiny muted">${rows[0].wwcd} WWCD · ${rows[0].kills} kills · avg #${num(rows[0].avgRank, 1)}</div>
           <div class="hero-figure">${num(rows[0].finalPoints)}</div>
-          <div class="tiny dim up">points</div>
+          <div class="tiny dim up">Total Points</div>
         </div>
       </a>` : ''}
     </div>
   </section>`;
 
   const tiles = `<div class="tiles">
-    ${tile('Games', num(summary.matches), `${esc(scopeName(scope))} stage`)}
-    ${tile('Total kills', num(summary.kills), `${num(summary.killsPerMatch)} per match`)}
-    ${tile('Total damage', num(summary.damage), `${num(summary.damage / Math.max(1, summary.matches), 0)} per match`)}
-    ${tile('Avg match length', dur(summary.avgDuration), 'start to final circle')}
-    ${tile('Zone deaths', num(summary.zoneDeaths), 'players lost to the blue zone', '')}
-    ${tile('Kill-feed coverage', pct((summary.killLogCoverage || 0) * 100, 0), 'events matched to kills')}
+    ${tile('Total Games', num(summary.matches), `${esc(scopeName(scope))} stage`, 'accent')}
+    ${tile('Total Eliminations', num(summary.kills), `${num(summary.killsPerMatch)} per match`)}
+    ${tile('Total Combat Damage', num(summary.damage), `${num(summary.damage / Math.max(1, summary.matches), 0)} per match`)}
+    ${tile('Avg Match Length', dur(summary.avgDuration), 'drop to final circle')}
+    ${tile('Zone Eliminations', num(summary.zoneDeaths), 'players lost to blue zone')}
+    ${tile('Feed Accuracy', pct((summary.killLogCoverage || 0) * 100, 0), 'events mapped to kills')}
   </div>`;
 
   const podium = `<div class="podium">
@@ -67,16 +77,18 @@ export async function render({ scope }) {
       const r = top[i];
       if (!r) return '<div></div>';
       const t = store.team(r.id);
-      const pos = ['1st', '2nd', '3rd'][r.rank - 1] || `${r.rank}th`;
+      const posLabels = ['1st Place', '2nd Place', '3rd Place'];
+      const posBadges = ['gold', 'silver', 'bronze'];
+      const pos = posLabels[r.rank - 1] || `${r.rank}th Place`;
       return `<a class="slot p${r.rank}" href="#/teams/${r.id}">
-        <div style="position:absolute;inset:-50% 30% 60% -30%;background:radial-gradient(circle,${rgba(r.color, .3)},transparent 70%);filter:blur(30px)"></div>
+        <div style="position:absolute;inset:-50% 30% 60% -30%;background:radial-gradient(circle,${rgba(r.color, .35)},transparent 70%);filter:blur(30px)"></div>
         <div style="position:relative">
-          <div class="pos">${pos}</div>
-          <div style="margin:10px 0 6px">${crest(t, r.rank === 1 ? 'lg' : '')}</div>
-          <div style="font-family:var(--display);font-size:${r.rank === 1 ? 22 : 18}px;font-weight:700">${esc(r.name)}</div>
-          <div class="tiny muted">${flagImg(t)} ${esc(r.tag)}</div>
-          <div class="num" style="font-size:26px;margin-top:8px">${num(r.finalPoints)}<span class="tiny dim"> pts</span></div>
-          <div class="tiny dim">${r.wwcd} WWCD · ${r.kills} kills · avg #${num(r.avgRank, 1)}</div>
+          <span class="badge ${posBadges[r.rank - 1] || ''}" style="margin-bottom:8px">${r.rank === 1 ? '👑 ' : ''}${pos}</span>
+          <div style="margin:12px 0 8px">${crest(t, r.rank === 1 ? 'lg' : '')}</div>
+          <div style="font-family:var(--display);font-size:${r.rank === 1 ? 23 : 19}px;font-weight:800">${esc(r.name)}</div>
+          <div class="tiny muted" style="margin-top:2px">${flagImg(t)} ${esc(r.tag)}</div>
+          <div class="num" style="font-size:28px;font-weight:800;margin-top:10px;color:var(--text)">${num(r.finalPoints)}<span class="tiny dim"> pts</span></div>
+          <div class="tiny dim" style="margin-top:2px">${r.wwcd} WWCD · ${r.kills} kills · avg #${num(r.avgRank, 1)}</div>
         </div>
       </a>`;
     }).join('')}
@@ -85,33 +97,33 @@ export async function render({ scope }) {
   /* points race */
   const race = raceChart(scope);
 
-  const leaders = panel('Standout players', `
+  const leaders = panel('Standout Performers', `
     <div class="cards">
       ${[
-        ['Top rated', bestPlayer, p => `${num(p.s.rating, 1)} rating`, p => `${num(p.s.killsPerMatch, 2)} K/M · ${num(p.s.damagePerMatch, 0)} DMG/M`],
-        ['Most kills', topFragger, p => `${p.s.kills} kills`, p => `${num(p.s.kpRate, 1)}% of team kills`],
-        ['Most damage', topDamage, p => `${num(p.s.damage)} dmg`, p => `${num(p.s.damagePerMatch, 0)} per match`],
-        ['Best support', topSupport, p => `${p.s.assists} assists`, p => `${p.s.rescues} revives`],
-        ['Longest kill', longest, p => `${num(p.s.longestKill)} m`, p => `${p.s.kills} kills total`],
-      ].filter(([, p]) => p).map(([label, p, big, sub]) => {
+        ['Top Rated', bestPlayer, p => `${num(p.s.rating, 1)} rating`, p => `${num(p.s.killsPerMatch, 2)} K/M · ${num(p.s.damagePerMatch, 0)} DMG/M`, 'gold'],
+        ['Most Kills', topFragger, p => `${p.s.kills} kills`, p => `${num(p.s.kpRate, 1)}% of team kills`, 'bad'],
+        ['Most Damage', topDamage, p => `${num(p.s.damage)} dmg`, p => `${num(p.s.damagePerMatch, 0)} per match`, 'good'],
+        ['Best Support', topSupport, p => `${p.s.assists} assists`, p => `${p.s.rescues} revives`, 'silver'],
+        ['Longest Snipe', longest, p => `${num(p.s.longestKill)} m`, p => `${p.s.kills} kills total`, 'bronze'],
+      ].filter(([, p]) => p).map(([label, p, big, sub, badgeCls]) => {
         const t = store.team(p.teamId);
         return `<a class="card" href="#/players/${p.id}">
           <div class="glow" style="background:${rgba(t?.color || '#6f8cff', .5)}"></div>
           <div class="card-head">
             ${avatar(p, t, 'lg')}
             <div style="min-width:0">
-              <div class="tiny up dim">${esc(label)}</div>
+              <span class="badge ${badgeCls}" style="margin-bottom:4px;font-size:10px">${esc(label)}</span>
               <div class="name">${esc(p.name)}</div>
               <div class="tiny muted">${esc(p.teamName || '')}</div>
             </div>
           </div>
           <div class="card-stats" style="grid-template-columns:1fr 1fr">
-            <div><div class="k">Headline</div><div class="v">${big(p)}</div></div>
-            <div><div class="k">Context</div><div class="v" style="font-size:12.5px">${sub(p)}</div></div>
+            <div><div class="k">Headline Stat</div><div class="v" style="color:var(--accent)">${big(p)}</div></div>
+            <div><div class="k">Context</div><div class="v" style="font-size:12px">${sub(p)}</div></div>
           </div>
         </a>`;
       }).join('')}
-    </div>`);
+    </div>`, { icon: 'users' });
 
   const killShape = killShapePanel(scope);
 
