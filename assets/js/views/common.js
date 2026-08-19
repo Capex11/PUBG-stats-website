@@ -151,7 +151,7 @@ export function playersTable(scope, list, opts = {}) {
 export function matchRow(m) {
   const w = store.team(m.winner.id);
   return `<a class="ident" href="#/matches/${m.key}" style="gap:10px;padding:10px 14px;border-radius:var(--radius-sm);background:var(--panel-2);border:1px solid var(--line-soft);transition:all .15s var(--ease)">
-    <span class="badge gold nowrap">${esc(m.stageLabel)} G${m.number}</span>
+    <span class="badge gold nowrap">Game ${m.number}</span>
     ${crest(w, 'sm')}
     <span class="name" style="flex:1;min-width:0;font-weight:600">${esc(m.winner.name)}</span>
     <span class="tiny dim nowrap">${m.totalKills} kills · ${dur(m.duration)}</span>

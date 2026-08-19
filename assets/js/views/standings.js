@@ -41,15 +41,12 @@ export async function render({ scope }) {
     })}
     ${panel('Official Leaderboard', standingsTable(scope), {
       icon: 'trophy',
-      note: 'Ranked by total points. Top 3 receive gold, silver and bronze broadcast tiers. Click any team row to view roster and game logs.',
     })}
     ${panel('Points race progression', race + legend(rows), {
       icon: 'activity',
-      note: 'Cumulative points trajectory after every match in this stage.',
     })}
     ${panel('Match-by-match placement grid', grid, {
       icon: 'target',
-      note: 'Every team’s finish in every match — cell color intensity reflects placement points earned. Hover a cell for full match details.',
     })}`,
   };
 }

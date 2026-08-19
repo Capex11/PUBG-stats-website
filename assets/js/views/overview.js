@@ -124,8 +124,8 @@ export async function render({ scope }) {
   return {
     html: `${hero}${tiles}${podium}
       <div class="grid g-2-1">
-        ${panel('Points race', race.html, { icon: 'trophy', note: race.note, aside: race.aside })}
-        ${panel('Latest games', matchList(scope, 9), {
+        ${panel('Points race', race.html, { icon: 'trophy', aside: race.aside })}
+        ${panel('Latest games', matchList(scope, 8), {
           icon: 'clock',
           aside: `<a class="chip" href="#/matches">All games</a>`,
         })}
@@ -158,11 +158,9 @@ function raceChart(scope) {
   const legend = `<div class="legend" style="margin-top:10px" role="group" aria-label="Show or hide a team">
     ${show.map(r => `<button type="button" aria-pressed="true" data-team="${r.id}">
       <span class="sw" style="background:${r.color}"></span>${esc(r.tag)}</button>`).join('')}
-  </div>
-  ${seriesTable(labels, series, 'Game')}`;
+  </div>`;
   return {
-    html: lineChart({ series, labels, height: 300, area: false }) + legend,
-    note: 'Cumulative points after every match — top eight teams of this stage. Click a team to mute it.',
+    html: `${lineChart({ series, labels, width: 960, height: 420, area: false })}${legend}`,
     aside: '',
     mount(root) {
       root.querySelectorAll('.legend [data-team]').forEach((btn, i) => {

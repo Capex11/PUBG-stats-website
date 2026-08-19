@@ -17,18 +17,22 @@ function scale(domain, range) {
 function ticks(min, max, count = 5) {
   if (min === max) return [min];
   const raw = (max - min) / count;
-  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const mag = Math.pow(10, Math.floor(Math.log10(raw || 1)));
   const norm = raw / mag;
   const step = (norm >= 7.5 ? 10 : norm >= 3.5 ? 5 : norm >= 1.5 ? 2 : 1) * mag;
+  const start = Math.floor(min / step) * step;
+  const end = Math.ceil(max / step) * step;
   const out = [];
-  for (let v = Math.ceil(min / step) * step; v <= max + 1e-9; v += step) out.push(Number(v.toFixed(6)));
-  return out;
+  for (let v = start; v <= end + step * 0.01; v += step) {
+    out.push(Number(v.toFixed(6)));
+  }
+  return out.length ? out : [min, max];
 }
 
 /* ------------------------------------------------------------------- line --- */
 export function lineChart({ series, labels, height = 260, yLabel = '', area = false,
   valueFmt = v => num(v, 0), pad = {}, width = 1000 }) {
-  const p = { t: 14, r: 16, b: 26, l: 44, ...pad };
+  const p = { t: 20, r: 24, b: 28, l: 48, ...pad };
   const w = width;
   const h = height;
   const all = series.flatMap(s => s.values.filter(v => v !== null && v !== undefined));
