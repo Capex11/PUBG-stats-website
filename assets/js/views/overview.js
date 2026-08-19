@@ -35,18 +35,12 @@ export async function render({ scope }) {
           <b>${summary.matches}</b> matches, <b>${rows.length}</b> professional squads, and <b>${players.length}</b> competing athletes.
         </p>
 
-        <div class="rules-chips" style="margin:14px 0 14px">
+        <div class="rules-chips" style="margin:14px 0 0">
           ${Object.entries(meta.scoring.placement).slice(0, 4).map(([k, v]) =>
             `<span class="rule-chip r${k}"><span class="pos">#${k}</span><span class="pts">${v} pts</span></span>`
           ).join('')}
           <span class="rule-chip kill"><span class="pos">⚡ Kill</span><span class="pts">+${meta.scoring.perKill} pt</span></span>
           <a class="chip" href="#/standings" style="padding:4px 10px;font-size:12px;font-weight:700">Full Rules →</a>
-        </div>
-
-        <div class="meta-strip">
-          <span class="meta-pill">Matches Completed: <b>${summary.matches}</b></span>
-          <span class="meta-pill">Kill Feed Coverage: <b>${Math.round((meta.dataQuality.killLogCoverage || 0) * 100)}%</b></span>
-          <span class="meta-pill">Updated: <b>${esc(meta.generatedAt.replace('T', ' ').slice(0, 16))} UTC</b></span>
         </div>
       </div>
 
