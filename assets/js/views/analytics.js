@@ -4,7 +4,7 @@
 import { store } from '../store.js';
 import {
   esc, num, pct, dur, panel, tile, crest, avatar, dataTable,
-  bindTables, bindTooltips, el, els, barCell,
+  bindTables, bindTooltips, el, els, barCell, rgba,
 } from '../ui.js';
 import {
   barChart, lineChart, heatmap, donut, scatter, ramp, barsTable, chartData,
